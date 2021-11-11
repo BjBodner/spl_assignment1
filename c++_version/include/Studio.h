@@ -18,6 +18,7 @@ public:
     std::vector<Workout>& getWorkoutOptions();
 
 private:
+    static void StudioConfigFileParser(std::ifstream& inFile, std::vector<Trainer *> &trainers, std::vector<Workout> &workouts);
     bool open;
     std::vector<Trainer*> trainers;
     std::vector<Workout> workout_options;

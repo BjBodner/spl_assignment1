@@ -3,7 +3,7 @@
 CC = g++
 CFLAGS = -g -Wall -Weffc++ -std=c++11
 LFLAGS = -L/usr/lib
-
+OFILES = bin/Action.o bin/Customer.o bin/Trainer.o bin/Workout.o bin/Studio.o bin/main.o
 # All Targets
 all: hello
 
@@ -12,12 +12,12 @@ all: hello
 hello: bin/srcToOFile
 	@echo 'Building target: hello'
 	@echo 'Invoking: C++ Linker'
-	$(CC) -o bin/hello bin/Action.o bin/Customer.o bin/Studio.o bin/Trainer.o bin/Workout.o bin/main.o $(LFLAGS)
+	$(CC) -o bin/hello $(OFILES) $(LFLAGS)
 	@echo 'Finished building target: hello'
 	@echo ' '
 
 # Parse all cpp files to o files
-bin/srcToOFile: bin/Action.o bin/Customer.o bin/Trainer.o bin/Workout.o bin/Studio.o bin/main.o
+bin/srcToOFile: $(OFILES)
 
 # Depends on the source and header files
 bin/Action.o: src/Action.cpp
