@@ -4,8 +4,8 @@ from typing import List
 import numpy as np
 
 class SweatyCustomer(_Customer):
-    def __init__(self, id: int, name: str, ordering_strategy: str) -> None:
-        super().__init__(id, name, ordering_strategy)
+    def __init__(self, name: str, strategy: str) -> None:
+        super().__init__(name, strategy)
 
     def order(self, workout_options) -> List[Workout]:
 

@@ -6,10 +6,16 @@ from typing import List
 
 class _Customer:
 
-    def __init__(self, id: int, name: str, ordering_strategy: str) -> None:
-        self.id = id
+    id_ = 0
+    @classmethod
+    def get_id(cls) -> int:
+        cls.id_ += 1
+        return cls.id_
+
+    def __init__(self, name: str, strategy: str) -> None:
+        self.id = _Customer.get_id()
         self.name = name
-        ordering_strategy = ordering_strategy
+        self.strategy = strategy
 
     def order(self, workout_options) -> List[Workout]:
         raise NotImplementedError

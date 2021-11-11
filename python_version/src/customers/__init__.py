@@ -1,0 +1,4 @@
+from .cheap_customer import CheapCustomer
+from .full_body_customer import FullBodyCustomer
+from .heavy_muscle_customer import HeavyMuscleCustomer
+from .sweaty_customer import SweatyCustomer
