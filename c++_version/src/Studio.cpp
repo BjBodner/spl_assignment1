@@ -20,21 +20,16 @@ Studio::Studio() : open(false) {
 
 Studio::Studio(const std::string &configFilePath) {
     std::ifstream inFile;
-    std::cout << "trying to open the file at path :" << configFilePath << std::endl;
+    std::cout << "Reading config file at path :" << configFilePath << std::endl;
     inFile.open(configFilePath);
     if (!inFile) {
-        std::cout << "Unable to open file" << std::endl;;
+        std::cout << "Unable to open config file." << std::endl;
     }
-
-    Studio::StudioConfigFileParser(inFile, trainers, workout_options);
+    else {
+        Studio::StudioConfigFileParser(inFile, trainers, workout_options);
+    }
     inFile.close();
 }
-
-enum ParserState {
-    NumOfTrainers,
-    TrainersCapacities,
-    Workouts
-};
 
 /// Removes all spaces from a string and returns a pointer to it
 /// \param str The string to trim
@@ -69,6 +64,12 @@ static std::vector <std::string> *SplitString(const std::string& str, const char
     //Returning a pointer to the vector by value so it will 'live' after pop
     return ans;
 }
+
+enum ParserState {
+    NumOfTrainers,
+    TrainersCapacities,
+    Workouts
+};
 
 /// Parses a Studio config file and populates the trainers vector and workouts vector by the parsed value
 /// \param inFile The stream file

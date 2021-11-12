@@ -13,9 +13,6 @@ int main(int argc, char** argv){
     string configurationFile = argv[1];
     Studio studio(configurationFile);
     studio.start();
-    for(int i=0;i<studio.getNumOfTrainers();i++){
-        std::cout << studio.getTrainer(i)->getCapacity() << std::endl;
-    }
     std::cout << "Studio is now open!" << std::endl;
     if(backup!=nullptr){
     	delete backup;
