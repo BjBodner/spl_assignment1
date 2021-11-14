@@ -18,6 +18,7 @@ public:
     ActionStatus getStatus() const;
     virtual void act(Studio& studio)=0;
     virtual std::string toString() const=0;
+    virtual ~BaseAction();
 protected:
     void complete();
     void error(std::string errorMsg);

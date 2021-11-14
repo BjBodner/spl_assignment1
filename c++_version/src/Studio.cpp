@@ -1,9 +1,14 @@
 #include "../include/Studio.h"
+#include "../include/Trainer.h"
 #include <iostream>
 #include <fstream>
 
 void Studio::start() {
 
+}
+
+std::vector <Workout> &Studio::getWorkoutOptions() {
+    return workout_options;
 }
 
 int Studio::getNumOfTrainers() const {

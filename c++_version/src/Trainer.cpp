@@ -1,6 +1,6 @@
 #include "../include/Trainer.h"
 
-Trainer::Trainer(int t_capacity) : capacity(t_capacity), open(false) {
+Trainer::Trainer(int t_capacity) : capacity(t_capacity), open(false),salary(0),orderList(std::vector<OrderPair>()) {
 
 }
 
@@ -13,7 +13,7 @@ std::vector<Customer *> &Trainer::getCustomers() {
 }
 
 Customer *Trainer::getCustomer(int id) {
-    for (int i = 0; i < customersList.size(); i++) {
+    for (size_t i = 0; i < customersList.size(); i++) {
         if (customersList[i]->getId() == id) {
             return customersList[i];
         }
@@ -40,17 +40,17 @@ void Trainer::addCustomer(Customer *customer) {
 
 //TODO: Assumes that the trainer is open. Need to check if its right
 void Trainer::removeCustomer(int id) {
-    for (int i = 0; i < customersList.size(); ++i) {
+    for (size_t i = 0; i < customersList.size(); i++) {
         if (customersList[i]->getId() == id) {
-            customersList.erase(i);
+            customersList.erase(customersList.begin()+i);
             break;
         }
     }
-    for (int i = 0; i < orderList.size(); ++i) {
+    for (size_t i = 0; i < orderList.size(); i++) {
         if (orderList[i].first == id) {
             //Order that the customer ordered
             //TODO: Check if I can erase objects from vector while iterating on it
-            orderList.erase(i);
+            orderList.erase(orderList.begin()+i);
         }
     }
     //If no customers left, close trainer
@@ -62,8 +62,8 @@ void Trainer::removeCustomer(int id) {
 //TODO: Ensure the function doesnt need to check if trainer is closed
 void Trainer::order(const int customer_id, const std::vector<int> workout_ids,
                     const std::vector <Workout> &workout_options) {
-    for (int i = 0; i < workout_ids.size(); ++i) {
-        for (int j = 0; j < workout_options.size(); ++j) {
+    for (size_t i = 0; i < workout_ids.size(); i++) {
+        for (size_t j = 0; j < workout_options.size(); j++) {
             if (workout_options[j].getId() == workout_ids[i]) {
                 orderList.push_back(OrderPair(customer_id, workout_options[j]));
                 break;
@@ -75,13 +75,13 @@ void Trainer::order(const int customer_id, const std::vector<int> workout_ids,
 ///Closes the trainer's session
 void Trainer::closeTrainer() {
     //Accumulate salary
-    for (int i = 0; i < orderList.size(); ++i) {
+    for (size_t i = 0; i < orderList.size(); i++) {
         salary += orderList[i].second.getPrice();
     }
     //Remove orders and customers
     orderList.clear();
     //TODO: ENSURE DELETION OF CUSTOMER'S
-    for (int i = 0; i < customersList.size(); ++i) {
+    for (size_t i = 0; i < customersList.size(); i++) {
         delete customersList[i];
     }
     customersList.clear();
@@ -92,3 +92,4 @@ void Trainer::closeTrainer() {
 void Trainer::openTrainer() {
     open = true;
 }
+
