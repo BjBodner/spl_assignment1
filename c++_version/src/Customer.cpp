@@ -1,5 +1,6 @@
 #include "../include/Customer.h"
 
+//TODO: MUST IMPLEMENT
 Customer::~Customer() throw() {}
 
 int Customer::getId() const {
@@ -10,14 +11,7 @@ std::string Customer::getName() const {
     return name;
 }
 
-std::vector<int> Customer::order(const std::vector <Workout> &workout_options) {
-    return std::vector<int>();
-}
-
-std::string Customer::toString() const {
-    return "";
-}
-
+//TODO: MUST IMPLEMENT
 Customer::Customer(std::string c_name, int c_id):name(c_name),id(c_id) {
 
 }

@@ -3,9 +3,12 @@
 #include <iostream>
 #include <fstream>
 
+//TODO: VALIDATE IMPLEMENTATION
 void Studio::start() {
-
+    open = true;
 }
+
+//Getters
 
 std::vector <Workout> &Studio::getWorkoutOptions() {
     return workout_options;
@@ -19,11 +22,14 @@ Trainer *Studio::getTrainer(int tid) {
     return trainers.at(tid);
 }
 
-Studio::Studio() : open(false) {
+//End Getters
+
+//TODO: MUST IMPLEMENT
+Studio::Studio() : open(false),trainers(std::vector<Trainer*>()),workout_options(std::vector<Workout>()),actionsLog(std::vector<BaseAction*>()) {
 
 }
 
-Studio::Studio(const std::string &configFilePath) {
+Studio::Studio(const std::string &configFilePath):Studio() {
     std::ifstream inFile;
     std::cout << "Reading config file at path :" << configFilePath << std::endl;
     inFile.open(configFilePath);
@@ -36,6 +42,7 @@ Studio::Studio(const std::string &configFilePath) {
     inFile.close();
 }
 
+//TODO: CHECK IF STATIC IMPLEMENTATION IS CORRECT AND LEGAL
 /// Removes all spaces from a string and returns a pointer to it
 /// \param str The string to trim
 /// \return A pointer to the trimmed string
@@ -50,6 +57,7 @@ static std::string *TrimString(const std::string& str) {
     return ans;
 }
 
+//TODO: CHECK IF STATIC IMPLEMENTATION IS CORRECT AND LEGAL
 /// Splits a string by a char
 /// \param str The string to split
 /// \param delimiter The char that will split the string

@@ -1,8 +1,11 @@
 #include "../include/Trainer.h"
 
-Trainer::Trainer(int t_capacity) : capacity(t_capacity), open(false),salary(0),orderList(std::vector<OrderPair>()) {
+//TODO: VALIDATE IF IMPLEMENTATION WITH EMPTY VECTORS IS CORRECT
+Trainer::Trainer(int t_capacity) : capacity(t_capacity), open(false),customersList(std::vector<Customer*>()),orderList(std::vector<OrderPair>()),salary(0) {
 
 }
+
+//Getters
 
 int Trainer::getCapacity() const {
     return capacity;
@@ -28,6 +31,8 @@ std::vector <OrderPair> &Trainer::getOrders() {
 int Trainer::getSalary() {
     return salary;
 }
+
+//End Getters
 
 bool Trainer::isOpen() {
     return open;

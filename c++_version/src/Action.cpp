@@ -3,7 +3,7 @@
 #include "../include/Customer.h"
 
 //TODO:CHECK IF NEEDS TO IMPLEMENT
-BaseAction::BaseAction() {}
+BaseAction::BaseAction():errorMsg("Default error message"),status(ERROR) {}
 
 //TODO:CHECK IF NEEDS TO IMPLEMENT
 BaseAction::~BaseAction() throw() {}
@@ -28,14 +28,21 @@ void OpenTrainer::act(Studio &studio) {
 }
 
 //TODO: MUST IMPLEMENT
-std::string OpenTrainer::toString() const {}
+std::string OpenTrainer::toString() const {
+    return "Not implemented";
+}
 
+//TODO: MUST IMPLEMENT
 Order::Order(int id):trainerId(id) {
 
 }
 
+//TODO: MUST IMPLEMENT
 void Order::act(Studio &studio) {
 
 }
 
-std::string Order::toString() const {}
+//TODO: MUST IMPLEMENT
+std::string Order::toString() const {
+    return "Not Implemented";
+}
