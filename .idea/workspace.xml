@@ -8,17 +8,15 @@
   <component name="ChangeListManager">
     <list default="true" id="d5fad42b-cc1b-4e69-8555-7bce63ccc2d5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c++_version/bin/Action.o" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/bin/Action.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c++_version/bin/Customer.o" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/bin/Customer.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c++_version/bin/Studio.o" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/bin/Studio.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c++_version/bin/Trainer.o" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/bin/Trainer.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c++_version/bin/Workout.o" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/bin/Workout.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c++_version/bin/hello" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/bin/hello" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c++_version/bin/Action.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c++_version/bin/Customer.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c++_version/bin/Studio.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c++_version/bin/Trainer.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c++_version/bin/Workout.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c++_version/bin/hello" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c++_version/bin/main.o" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/c++_version/src/Action.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/src/Action.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c++_version/src/Customer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/src/Customer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c++_version/src/Studio.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/src/Studio.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/c++_version/src/Trainer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/src/Trainer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c++_version/src/Workout.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/src/Workout.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +73,7 @@
       <workItem from="1636705705624" duration="5038000" />
       <workItem from="1636808303181" duration="2779000" />
       <workItem from="1636884494226" duration="5791000" />
-      <workItem from="1636900559391" duration="1197000" />
+      <workItem from="1636900559391" duration="7355000" />
     </task>
     <servers />
   </component>

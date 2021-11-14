@@ -43,7 +43,10 @@ void Trainer::addCustomer(Customer *customer) {
     customersList.push_back(customer);
 }
 
-//TODO: Assumes that the trainer is open. Need to check if its right
+/// Removes a customer from the customers list,
+/// and all of the workouts he ordered, and cutting the salary accordingly
+/// if no customers left, the trainer closes its session
+/// \param id The customer id
 void Trainer::removeCustomer(int id) {
     for (size_t i = 0; i < customersList.size(); i++) {
         if (customersList[i]->getId() == id) {
@@ -64,7 +67,6 @@ void Trainer::removeCustomer(int id) {
     }
 }
 
-//TODO: Ensure the function doesnt need to check if trainer is closed
 void Trainer::order(const int customer_id, const std::vector<int> workout_ids,
                     const std::vector <Workout> &workout_options) {
     for (size_t i = 0; i < workout_ids.size(); i++) {
@@ -77,7 +79,7 @@ void Trainer::order(const int customer_id, const std::vector<int> workout_ids,
     }
 }
 
-///Closes the trainer's session
+///Closes the trainer's session and accumulates its salary
 void Trainer::closeTrainer() {
     //Accumulate salary
     for (size_t i = 0; i < orderList.size(); i++) {
@@ -85,10 +87,6 @@ void Trainer::closeTrainer() {
     }
     //Remove orders and customers
     orderList.clear();
-    //TODO: ENSURE DELETION OF CUSTOMER'S
-    for (size_t i = 0; i < customersList.size(); i++) {
-        delete customersList[i];
-    }
     customersList.clear();
     open = false;
 }
