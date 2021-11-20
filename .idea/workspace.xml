@@ -8,6 +8,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d5fad42b-cc1b-4e69-8555-7bce63ccc2d5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c++_version/src/Customer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/src/Customer.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/c++_version/src/Workout.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/src/Workout.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -45,6 +46,11 @@
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RunManager">
+    <configuration name="customer_test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$PROJECT_DIR$/c++_version/src" PASS_PARENT_ENVS_2="true" RUN_PATH="$PROJECT_DIR$/c++_version/src/Customer.cpp" EXPLICIT_BUILD_TARGET_NAME="all">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -67,7 +73,7 @@
       <workItem from="1636884494226" duration="5791000" />
       <workItem from="1636900559391" duration="7355000" />
       <workItem from="1637335288686" duration="2354000" />
-      <workItem from="1637386118869" duration="4369000" />
+      <workItem from="1637386118869" duration="9795000" />
     </task>
     <servers />
   </component>
