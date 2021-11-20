@@ -67,7 +67,8 @@ int getBestWorkoutIdx(const vector<Workout> &workout_options, const WorkoutType 
 
 
 /// Sweaty customer class
-SweatyCustomer::SweatyCustomer(string name, int id);:name(c_name),id(c_id) {}
+SweatyCustomer::SweatyCustomer(string name, int id):name(c_name),id(c_id) {}
+SweatyCustomer::SweatyCustomer():name(""),id(0) {}
 SweatyCustomer::SweatyCustomer(const SweatyCustomer &other){
         name = other.name;
         id = other.name + 1;
@@ -85,7 +86,7 @@ vector<int> SweatyCustomer::order(const vector<Workout> &workout_options) {
         int i = 0;
         vector<int> workouts_to_order;
         for (vector<Workout>::iterator it=vector.begin(); it != vector.end(); it++){
-            if (it->getType() == CARDIO) {
+            if (it->getType() == WorkoutType.CARDIO) {
                 workouts_to_order.push_back(i);
             }
             i ++;
@@ -98,7 +99,8 @@ vector<int> SweatyCustomer::order(const vector<Workout> &workout_options) {
 
 
 /// Cheap Customer class
-CheapCustomer::CheapCustomer(string name, int id);:name(c_name),id(c_id) {}
+CheapCustomer::CheapCustomer(string name, int id):name(c_name),id(c_id) {}
+CheapCustomer::CheapCustomer():name(""),id(0) {}
 CheapCustomer::CheapCustomer(const CheapCustomer &other){
     name = other.name;
     id = other.name + 1;
@@ -142,7 +144,8 @@ vector<int> CheapCustomer::order(const vector<Workout> &workout_options) {
 
 
 /// Heavy muscle customer
-HeavyMuscleCustomer::HeavyMuscleCustomer(string name, int id);:name(c_name),id(c_id) {}
+HeavyMuscleCustomer::HeavyMuscleCustomer(string name, int id):name(c_name),id(c_id) {}
+HeavyMuscleCustomer::HeavyMuscleCustomer():name(""),id(0) {}
 HeavyMuscleCustomer::HeavyMuscleCustomer(const HeavyMuscleCustomer &other){
     name = other.name;
     id = other.name + 1;
@@ -160,7 +163,7 @@ vector<int> HeavyMuscleCustomer::order(const vector<Workout> &workout_options) {
 //    int i = 0;
     vector<Workout> anaerobic_workouts;
     for (vector<Workout>::iterator it=vector.begin(); it != vector.end(); it++){
-        if (it->getType() == ANAEROBIC) {
+        if (it->getType() == WorkoutType.ANAEROBIC) {
             anaerobic_workouts.push_back(it);
         }
 //        i ++;
@@ -176,7 +179,8 @@ vector<int> HeavyMuscleCustomer::order(const vector<Workout> &workout_options) {
 
 
 /// full body customer
-FullBodyCustomer::FullBodyCustomer(string name, int id);:name(c_name),id(c_id) {}
+FullBodyCustomer::FullBodyCustomer(string name, int id):name(c_name),id(c_id) {}
+FullBodyCustomer::FullBodyCustomer():name(""),id(0) {}
 FullBodyCustomer::FullBodyCustomer(const FullBodyCustomer &other){
     name = other.name;
     id = other.name + 1;
@@ -194,9 +198,9 @@ vector<int> FullBodyCustomer::order(const vector<Workout> &workout_options) {
     vector<Workout> workouts_to_order;
 
     /// TODO do we need to handle cases where such workouts don't exist?
-    int cheapest_cardio_idx = getBestWorkoutIdx(vector, CARDIO, "lowest")
-    int expensive_mixtype_idx = getBestWorkoutIdx(vector, MIXED, "highest")
-    int cheapest_anaerobic_idx = getBestWorkoutIdx(vector, ANAEROBIC, "lowest")
+    int cheapest_cardio_idx = getBestWorkoutIdx(vector, WorkoutType.CARDIO, "lowest")
+    int expensive_mixtype_idx = getBestWorkoutIdx(vector, WorkoutType.MIXED, "highest")
+    int cheapest_anaerobic_idx = getBestWorkoutIdx(vector, WorkoutType.ANAEROBIC, "lowest")
 
     /// add to vector
     workouts_to_order.push_back(cheapest_cardio_idx)

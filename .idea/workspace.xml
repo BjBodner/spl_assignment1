@@ -9,6 +9,7 @@
     <list default="true" id="d5fad42b-cc1b-4e69-8555-7bce63ccc2d5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/c++_version/src/Customer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/src/Customer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c++_version/src/Workout.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/src/Workout.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +68,7 @@
       <workItem from="1636884494226" duration="5791000" />
       <workItem from="1636900559391" duration="7355000" />
       <workItem from="1637335288686" duration="2354000" />
-      <workItem from="1637386118869" duration="3291000" />
+      <workItem from="1637386118869" duration="3847000" />
     </task>
     <servers />
   </component>
