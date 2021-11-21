@@ -13,7 +13,6 @@ int main(int argc, char** argv){
     string configurationFile = argv[1];
     Studio studio(configurationFile);
     studio.start();
-    std::cout << "Studio is now open!" << std::endl;
     if(backup!=nullptr){
     	delete backup;
     	backup = nullptr;

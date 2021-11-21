@@ -16,6 +16,7 @@ public:
     Trainer* getTrainer(int tid);
 	const std::vector<BaseAction*>& getActionsLog() const; // Return a reference to the history of actions
     std::vector<Workout>& getWorkoutOptions();
+    Studio& operator=(const Studio& other);
 
 private:
     static void StudioConfigFileParser(std::ifstream& inFile, std::vector<Trainer *> &trainers, std::vector<Workout> &workouts);

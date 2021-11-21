@@ -7,8 +7,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d5fad42b-cc1b-4e69-8555-7bce63ccc2d5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c++_version/include/Studio.h" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/include/Studio.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c++_version/src/Action.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/src/Action.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/c++_version/src/Studio.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/src/Studio.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/c++_version/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/src/main.cpp" afterDir="false" />
     </list>
@@ -44,7 +45,7 @@
     <property name="cf.first.check.clang-format" value="false" />
     <property name="cidr.known.project.marker" value="true" />
     <property name="last_opened_file_path" value="$USER_HOME$/CPP/hello2" />
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
   </component>
   <component name="RunManager">
     <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
@@ -70,7 +71,7 @@
       <workItem from="1636900559391" duration="7355000" />
       <workItem from="1637335288686" duration="2354000" />
       <workItem from="1637386118869" duration="4369000" />
-      <workItem from="1637503640476" duration="710000" />
+      <workItem from="1637503640476" duration="9954000" />
     </task>
     <servers />
   </component>
