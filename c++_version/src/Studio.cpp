@@ -3,9 +3,90 @@
 #include <iostream>
 #include <fstream>
 
+Studio &Studio::operator=(const Studio &other) {
+    if (&other != this) {
+        this->open = other.open;
+        for (size_t i = 0; i < trainers.size(); i++) {
+            delete trainers.at(i);
+        }
+        this->trainers = other.trainers;
+        this->workout_options.clear();
+        for (size_t i = 0; i < workout_options.size(); i++) {
+            this->workout_options.push_back(other.workout_options.at(i));
+        }
+        for (size_t i = 0; i < actionsLog.size(); i++) {
+            delete actionsLog.at(i);
+        }
+        this->actionsLog = other.actionsLog;
+    }
+}
+
 //TODO: VALIDATE IMPLEMENTATION
 void Studio::start() {
     open = true;
+    std::cout << "Studio is now open!" << std::endl;
+    std::string input = "";
+    std::getline(std::cin, input);
+    while (input != "closeall") {
+        std::vector <std::string> *inputPartials = SplitString(input, ' ');
+        std::string firstWord = inputPartials->at(0);
+        if (firstWord == "open") {
+            OpenTrainer openTrainer = ParseOpenTrainerInput(*inputPartials);
+            openTrainer.act(*this);
+        } else if (firstWord == "order") {
+            Order order = Order(inputPartials->at(1));
+            order.act(*this);
+        } else if (firstWord == "move") {
+            MoveCustomer moveCustomer = MoveCustomer(std::stoi(inputPartials->at(1)), std::stoi(inputPartials->at(2)),
+                                                     std::stoi(inputPartials->at(3)));
+            moveCustomer.act(*this);
+        } else if (firstWord == "close") {
+            Close close = Close(inputPartials->at(1));
+            close.act(*this);
+        } else if (firstWord == "workout_options") {
+            PrintWorkoutOptions printWorkoutOptions = PrintWorkoutOptions();
+            printWorkoutOptions.act(*this);
+        } else if (firstWord == "status") {
+            PrintTrainerStatus printTrainerStatus = PrintTrainerStatus(inputPartials->at(1));
+            printTrainerStatus.act(*this);
+        } else if (firstWord == "log") {
+            PrintActionsLog printActionsLog = PrintActionsLog();
+            printActionsLog.act(*this);
+        } else if (firstWord == "backup") {
+            BackupStudio backupStudio = BackupStudio();
+            backupStudio.act(*this);
+        } else if (firstWord == "restore") {
+            RestoreStudio restoreStudio = RestoreStudio();
+            restoreStudio.act(*this);
+        }
+        std::getline(std::cin, input);
+    }
+    CloseAll closeAll = CloseAll();
+    closeAll.act(*this);
+}
+
+OpenTrainer ParseOpenTrainerInput(std::vector <std::string> &inputPartials) {
+    std::string trainerID = inputPartials[1];
+    std::vector < Customer * > customers = new std::vector<Customer *>();
+    for (size_t i = 2; i < inputPartials.size(); i++) {
+        std::vector <std::string> *customerPartials = SplitString(inputPartials[i], ',');
+        if (customerPartials->at(1) == "swt") {
+            SweatyCustomer *sweatyCustomer = new SweatyCustomer(customerPartials->at(0), customers.size());
+            customers.push_back(sweatyCustomer);
+        } else if (customerPartials->at(1) == "chp") {
+            CheapCustomer *cheapCustomer = new CheapCustomer(customerPartials->at(0), customers.size());
+            customers.push_back(cheapCustomer);
+        } else if (customerPartials->at(1) == "mcl") {
+            HeavyMuscleCustomer *heavyMuscleCustomer = new HeavyMuscleCustomer(customerPartials->at(0),
+                                                                               customers.size());
+            customers.push_back(heavyMuscleCustomer);
+        } else if (customerPartials->at(1) == "fbd") {
+            FullBodyCustomer *fullBodyCustomer = new FullBodyCustomer(customerPartials->at(0), customers.size());
+            customers.push_back(fullBodyCustomer);
+        }
+        delete customerPartials;
+    }
+    return OpenTrainer(trainerID, customers);
 }
 
 //Getters
@@ -25,18 +106,18 @@ Trainer *Studio::getTrainer(int tid) {
 //End Getters
 
 //TODO: MUST IMPLEMENT
-Studio::Studio() : open(false),trainers(std::vector<Trainer*>()),workout_options(std::vector<Workout>()),actionsLog(std::vector<BaseAction*>()) {
+Studio::Studio() : open(false), trainers(std::vector<Trainer *>()), workout_options(std::vector<Workout>()),
+                   actionsLog(std::vector<BaseAction *>()) {
 
 }
 
-Studio::Studio(const std::string &configFilePath):Studio() {
+Studio::Studio(const std::string &configFilePath) : Studio() {
     std::ifstream inFile;
     std::cout << "Reading config file at path :" << configFilePath << std::endl;
     inFile.open(configFilePath);
     if (!inFile) {
         std::cout << "Unable to open config file." << std::endl;
-    }
-    else {
+    } else {
         Studio::StudioConfigFileParser(inFile, trainers, workout_options);
     }
     inFile.close();
@@ -46,7 +127,7 @@ Studio::Studio(const std::string &configFilePath):Studio() {
 /// Removes all spaces from a string and returns a pointer to it
 /// \param str The string to trim
 /// \return A pointer to the trimmed string
-static std::string *TrimString(const std::string& str) {
+static std::string *TrimString(const std::string &str) {
     std::string *ans = new std::string("");
     for (size_t i = 0; i < str.length(); i++) {
         if (str.at(i) != ' ') {
@@ -62,7 +143,7 @@ static std::string *TrimString(const std::string& str) {
 /// \param str The string to split
 /// \param delimiter The char that will split the string
 /// \return A pointer to the vector of splitted strings
-static std::vector <std::string> *SplitString(const std::string& str, const char delimiter) {
+static std::vector <std::string> *SplitString(const std::string &str, const char delimiter) {
     std::vector <std::string> *ans = new std::vector<std::string>();
     std::string tempSum = "";
     for (size_t i = 0; i < str.length(); i++) {
