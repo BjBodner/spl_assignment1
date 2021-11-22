@@ -3,6 +3,31 @@
 #include <iostream>
 #include <fstream>
 
+const std::vector<BaseAction *> &Studio::getActionsLog() const {
+    return actionsLog;
+}
+
+//TODO: CHECK IF STATIC IMPLEMENTATION IS CORRECT AND LEGAL
+/// Splits a string by a char
+/// \param str The string to split
+/// \param delimiter The char that will split the string
+/// \return A pointer to the vector of splitted strings
+static std::vector <std::string> *SplitString(const std::string &str, const char delimiter) {
+    std::vector <std::string> *ans = new std::vector<std::string>();
+    std::string tempSum = "";
+    for (size_t i = 0; i < str.length(); i++) {
+        if (str.at(i) != delimiter) {
+            tempSum += str.at(i);
+        } else {
+            ans->push_back(tempSum);
+            tempSum = "";
+        }
+    }
+    ans->push_back(tempSum);
+    //Returning a pointer to the vector by value so it will 'live' after pop
+    return ans;
+}
+
 Studio &Studio::operator=(const Studio &other) {
     if (&other != this) {
         this->open = other.open;
@@ -19,55 +44,12 @@ Studio &Studio::operator=(const Studio &other) {
         }
         this->actionsLog = other.actionsLog;
     }
-}
-
-//TODO: VALIDATE IMPLEMENTATION
-void Studio::start() {
-    open = true;
-    std::cout << "Studio is now open!" << std::endl;
-    std::string input = "";
-    std::getline(std::cin, input);
-    while (input != "closeall") {
-        std::vector <std::string> *inputPartials = SplitString(input, ' ');
-        std::string firstWord = inputPartials->at(0);
-        if (firstWord == "open") {
-            OpenTrainer openTrainer = ParseOpenTrainerInput(*inputPartials);
-            openTrainer.act(*this);
-        } else if (firstWord == "order") {
-            Order order = Order(inputPartials->at(1));
-            order.act(*this);
-        } else if (firstWord == "move") {
-            MoveCustomer moveCustomer = MoveCustomer(std::stoi(inputPartials->at(1)), std::stoi(inputPartials->at(2)),
-                                                     std::stoi(inputPartials->at(3)));
-            moveCustomer.act(*this);
-        } else if (firstWord == "close") {
-            Close close = Close(inputPartials->at(1));
-            close.act(*this);
-        } else if (firstWord == "workout_options") {
-            PrintWorkoutOptions printWorkoutOptions = PrintWorkoutOptions();
-            printWorkoutOptions.act(*this);
-        } else if (firstWord == "status") {
-            PrintTrainerStatus printTrainerStatus = PrintTrainerStatus(inputPartials->at(1));
-            printTrainerStatus.act(*this);
-        } else if (firstWord == "log") {
-            PrintActionsLog printActionsLog = PrintActionsLog();
-            printActionsLog.act(*this);
-        } else if (firstWord == "backup") {
-            BackupStudio backupStudio = BackupStudio();
-            backupStudio.act(*this);
-        } else if (firstWord == "restore") {
-            RestoreStudio restoreStudio = RestoreStudio();
-            restoreStudio.act(*this);
-        }
-        std::getline(std::cin, input);
-    }
-    CloseAll closeAll = CloseAll();
-    closeAll.act(*this);
+    return *this;
 }
 
 OpenTrainer ParseOpenTrainerInput(std::vector <std::string> &inputPartials) {
     std::string trainerID = inputPartials[1];
-    std::vector < Customer * > customers = new std::vector<Customer *>();
+    std::vector < Customer * > customers = std::vector<Customer *>();
     for (size_t i = 2; i < inputPartials.size(); i++) {
         std::vector <std::string> *customerPartials = SplitString(inputPartials[i], ',');
         if (customerPartials->at(1) == "swt") {
@@ -86,7 +68,51 @@ OpenTrainer ParseOpenTrainerInput(std::vector <std::string> &inputPartials) {
         }
         delete customerPartials;
     }
-    return OpenTrainer(trainerID, customers);
+    return OpenTrainer(std::stoi(trainerID), customers);
+}
+
+//TODO: VALIDATE IMPLEMENTATION
+void Studio::start() {
+    open = true;
+    std::cout << "Studio is now open!" << std::endl;
+    std::string input = "";
+    std::getline(std::cin, input);
+    while (input != "closeall") {
+        std::vector <std::string> *inputPartials = SplitString(input, ' ');
+        std::string firstWord = inputPartials->at(0);
+        if (firstWord == "open") {
+            OpenTrainer openTrainer = ParseOpenTrainerInput(*inputPartials);
+            openTrainer.act(*this);
+        } else if (firstWord == "order") {
+            Order order = Order(std::stoi(inputPartials->at(1)));
+            order.act(*this);
+        } else if (firstWord == "move") {
+            MoveCustomer moveCustomer = MoveCustomer(std::stoi(inputPartials->at(1)), std::stoi(inputPartials->at(2)),
+                                                     std::stoi(inputPartials->at(3)));
+            moveCustomer.act(*this);
+        } else if (firstWord == "close") {
+            Close close = Close(std::stoi(inputPartials->at(1)));
+            close.act(*this);
+        } else if (firstWord == "workout_options") {
+            PrintWorkoutOptions printWorkoutOptions = PrintWorkoutOptions();
+            printWorkoutOptions.act(*this);
+        } else if (firstWord == "status") {
+            PrintTrainerStatus printTrainerStatus = PrintTrainerStatus(std::stoi(inputPartials->at(1)));
+            printTrainerStatus.act(*this);
+        } else if (firstWord == "log") {
+            PrintActionsLog printActionsLog = PrintActionsLog();
+            printActionsLog.act(*this);
+        } else if (firstWord == "backup") {
+            BackupStudio backupStudio = BackupStudio();
+            backupStudio.act(*this);
+        } else if (firstWord == "restore") {
+            RestoreStudio restoreStudio = RestoreStudio();
+            restoreStudio.act(*this);
+        }
+        std::getline(std::cin, input);
+    }
+    CloseAll closeAll = CloseAll();
+    closeAll.act(*this);
 }
 
 //Getters
@@ -135,27 +161,6 @@ static std::string *TrimString(const std::string &str) {
         }
     }
     //Returning a pointer to the string by value so it will 'live' after pop
-    return ans;
-}
-
-//TODO: CHECK IF STATIC IMPLEMENTATION IS CORRECT AND LEGAL
-/// Splits a string by a char
-/// \param str The string to split
-/// \param delimiter The char that will split the string
-/// \return A pointer to the vector of splitted strings
-static std::vector <std::string> *SplitString(const std::string &str, const char delimiter) {
-    std::vector <std::string> *ans = new std::vector<std::string>();
-    std::string tempSum = "";
-    for (size_t i = 0; i < str.length(); i++) {
-        if (str.at(i) != delimiter) {
-            tempSum += str.at(i);
-        } else {
-            ans->push_back(tempSum);
-            tempSum = "";
-        }
-    }
-    ans->push_back(tempSum);
-    //Returning a pointer to the vector by value so it will 'live' after pop
     return ans;
 }
 

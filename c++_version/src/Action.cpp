@@ -19,6 +19,10 @@ std::string BaseAction::getErrorMsg() const {
     return errorMsg;
 }
 
+ActionStatus BaseAction::getStatus() const {
+    return status;
+}
+
 void BaseAction::complete() {
     this->status = COMPLETED;
 }
@@ -44,7 +48,7 @@ void OpenTrainer::act(Studio &studio) {
 
 //TODO: NEED TO IMPLEMENT CUSTOMER TOSTRING
 std::string OpenTrainer::toString() const {
-    std::string ans = "open " + trainerId + " ";
+    std::string ans = "open " + std::to_string(trainerId) + " ";
     for (size_t i = 0; i < customers.size(); i++) {
         ans += customers.at(i)->toString() + " ";
     }
@@ -84,7 +88,7 @@ void Order::act(Studio &studio) {
 }
 
 std::string Order::toString() const {
-    std::string ans = "order " + trainerId + " ";
+    std::string ans = "order " + std::to_string(trainerId) + " ";
     if (getStatus() == ERROR) {
         ans += "Error: " + getErrorMsg();
     } else {
@@ -121,7 +125,8 @@ void MoveCustomer::act(Studio &studio) {
 }
 
 std::string MoveCustomer::toString() const {
-    std::string ans = "move " + srcTrainer + " " + dstTrainer + " " + id + " ";
+    std::string ans =
+            "move " + std::to_string(srcTrainer) + " " + std::to_string(dstTrainer) + " " + std::to_string(id) + " ";
     if (getStatus() == ERROR) {
         ans += "Error: " + getErrorMsg();
     } else {
@@ -144,7 +149,7 @@ void Close::act(Studio &studio) {
 }
 
 std::string Close::toString() const {
-    std::string ans = "close " + trainerId + " ";
+    std::string ans = "close " + std::to_string(trainerId) + " ";
     if (getStatus() == ERROR) {
         ans += "Error: " + getErrorMsg();
     } else {
@@ -211,7 +216,7 @@ void PrintTrainerStatus::act(Studio &studio) {
 }
 
 std::string PrintTrainerStatus::toString() const {
-    return "status " + trainerId + " Completed";
+    return "status " + std::to_string(trainerId) + " Completed";
 }
 
 PrintActionsLog::PrintActionsLog() {}
@@ -244,7 +249,7 @@ std::string BackupStudio::toString() const {
 RestoreStudio::RestoreStudio() {}
 
 void RestoreStudio::act(Studio &studio) {
-    if(backup== nullptr){
+    if (backup == nullptr) {
         error("No backup available");
         return;
     }

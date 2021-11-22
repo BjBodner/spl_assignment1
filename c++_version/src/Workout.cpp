@@ -8,18 +8,22 @@
 using namespace std;
 
 
-Workout::Workout(int w_id, string w_name, int w_price, WorkoutType w_type):id(w_id),name(w_name),price(w_price),type(w_type) {}
-Workout::Workout():id(0),name(""),price(0),type(CARDIO){}
+Workout::Workout(int w_id, string w_name, int w_price, WorkoutType w_type) : id(w_id), name(w_name), price(w_price),
+                                                                             type(w_type) {}
+
+Workout::Workout() : id(0), name(""), price(0), type(CARDIO) {}
+
+//TODO: Delete it and find who is using it
 Workout &Workout::operator=(const Workout &other) {
-    int _id = other.getId() + 1;
-    string _name = other.getName();
-    int _price = other.getPrice();
-    WorkoutType _type = other.getType();
-
-    /// DANGER this may cause a memory leak
-    Workout *w = new Workout(_id, _name, _price, _type);
-    return *w;
-
+//    int _id = other.getId() + 1;
+//    string _name = other.getName();
+//    int _price = other.getPrice();
+//    WorkoutType _type = other.getType();
+//
+//    /// DANGER this may cause a memory leak
+//    Workout *w = new Workout(_id, _name, _price, _type);
+//    return *w;
+    return *this;
 }
 
 //Getters
