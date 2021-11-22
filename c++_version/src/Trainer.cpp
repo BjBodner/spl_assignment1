@@ -1,6 +1,14 @@
-#include "../include/Trainer.h"
+//
+// Created by benjy on 11/20/2021.
+//
 
-//TODO: VALIDATE IF IMPLEMENTATION WITH EMPTY VECTORS IS CORRECT
+//#include "../include/Trainer.h"
+#include "../include/Trainer.h"
+#include <iostream>
+
+using namespace std;
+
+
 Trainer::Trainer(int t_capacity) : capacity(t_capacity), open(false),customersList(std::vector<Customer*>()),orderList(std::vector<OrderPair>()),salary(0) {
 
 }
@@ -15,7 +23,7 @@ std::vector<Customer *> &Trainer::getCustomers() {
     return customersList;
 }
 
-Customer *Trainer::getCustomer(int id) {
+Customer* Trainer::getCustomer(int id) {
     for (size_t i = 0; i < customersList.size(); i++) {
         if (customersList[i]->getId() == id) {
             return customersList[i];
@@ -48,20 +56,29 @@ void Trainer::addCustomer(Customer *customer) {
 /// if no customers left, the trainer closes its session
 /// \param id The customer id
 void Trainer::removeCustomer(int id) {
+
+    /// remove customer from customer list
     for (size_t i = 0; i < customersList.size(); i++) {
         if (customersList[i]->getId() == id) {
+            // removes from container and calls destructor
             customersList.erase(customersList.begin()+i);
             break;
         }
     }
+
+    ///remove orders the  customer made
+    vector<int> orders_to_erase;
     for (size_t i = 0; i < orderList.size(); i++) {
         if (orderList[i].first == id) {
-            //Order that the customer ordered
-            //TODO: Check if I can erase objects from vector while iterating on it
-            orderList.erase(orderList.begin()+i);
+            orders_to_erase.push_back(i);
         }
     }
-    //If no customers left, close trainer
+    for (size_t i = 0; i < orders_to_erase.size(); i++){
+        int order_to_erase = orders_to_erase[i];
+        orderList.erase(orderList.begin() + order_to_erase);
+    }
+
+    ///If no customers left, close trainer
     if (customersList.size() == 0) {
         closeTrainer();
     }
@@ -69,10 +86,18 @@ void Trainer::removeCustomer(int id) {
 
 void Trainer::order(const int customer_id, const std::vector<int> workout_ids,
                     const std::vector <Workout> &workout_options) {
+
     for (size_t i = 0; i < workout_ids.size(); i++) {
         for (size_t j = 0; j < workout_options.size(); j++) {
-            if (workout_options[j].getId() == workout_ids[i]) {
+            Workout current_workout = workout_options[j];
+            int requested_workout_id = workout_ids[i];
+
+            if (current_workout.getId() == requested_workout_id) {
+                string current_workout_name = workout_options[j].getName();
                 orderList.push_back(OrderPair(customer_id, workout_options[j]));
+                cout << this->getCustomer(customer_id)->getName() + " Is Doing " + current_workout.getName() << endl;
+
+
                 break;
             }
         }
@@ -87,6 +112,7 @@ void Trainer::closeTrainer() {
     }
     //Remove orders and customers
     orderList.clear();
+
     customersList.clear();
     open = false;
 }

@@ -30,6 +30,17 @@ void printWorkout(const Workout current_workout, string prefix){
     cout << workout_description << endl;
 }
 
+Workout getWorkout(const vector<Workout> &workout_options, const int workout_id){
+
+    for (int i=0; i < workout_options.size(); i++){
+
+        int a = 1;
+        if (workout_options[i].getId() == workout_id) {
+            return workout_options[i];
+        }
+    }
+}
+
 
 /// Sweaty customer class
 SweatyCustomer::SweatyCustomer(string c_name, int c_id): Customer(c_name, c_id) {}
@@ -45,10 +56,12 @@ vector<int> SweatyCustomer::order(const vector<Workout> &workout_options) {
 
         Workout current_workout = workout_options[i];
         if (current_workout.getType() == CARDIO) {
-            workouts_to_order.push_back(i);
+
+
+            workouts_to_order.push_back(current_workout.getId());
 
             /// for debugging
-            printWorkout(current_workout, "sweaty customer: " + this->getName() + " , id: " + to_string(this->getId()) + " added ");
+//            printWorkout(current_workout, "sweaty customer: " + this->getName() + " , id: " + to_string(this->getId()) + " added ");
         }
 
     }
@@ -76,14 +89,14 @@ vector<int> CheapCustomer::order(const vector<Workout> &workout_options) {
         if (i == 0) {
             min_price = current_workout.getPrice();
             lowest_id = current_workout.getId();
-            workout_to_order = i;
+            workout_to_order = current_workout.getId();
         }
 
         /// order if current workout is lowest price AND lowest id
         if ((min_price > current_workout.getPrice()) or ((min_price == current_workout.getPrice()) and (lowest_id > current_workout.getId()))) {
             min_price = current_workout.getPrice();
             lowest_id = current_workout.getId();
-            workout_to_order = i;
+            workout_to_order = current_workout.getId();
         }
     }
 
@@ -91,8 +104,10 @@ vector<int> CheapCustomer::order(const vector<Workout> &workout_options) {
     vector<int> workouts_to_order;
     workouts_to_order.push_back(workout_to_order);
 
-    Workout current_workout = workout_options[workout_to_order];
-    printWorkout(current_workout, "cheap customer: " + this->getName() + " , id: " + to_string(this->getId()) + " added ");
+    Workout current_workout = getWorkout(workout_options, workout_to_order);
+
+    /// for debugging
+//    printWorkout(current_workout, "cheap customer: " + this->getName() + " , id: " + to_string(this->getId()) + " added ");
 
     return workouts_to_order;
 
@@ -115,8 +130,10 @@ vector<int> HeavyMuscleCustomer::order(const vector<Workout> &workout_options) {
         Workout current_workout = workout_options[i];
 
         if (current_workout.getType() == ANAEROBIC) {
-            printWorkout(current_workout, "BEFORE SORTING heavy customer: " + this->getName() + " , id: " + to_string(this->getId()) + " added ");
-            workouts_to_order.push_back(i);
+
+            /// for debugging
+//            printWorkout(current_workout, "BEFORE SORTING heavy customer: " + this->getName() + " , id: " + to_string(this->getId()) + " added ");
+            workouts_to_order.push_back(current_workout.getId());
         }
     }
 
@@ -162,7 +179,7 @@ int getBestWorkoutIdx(const vector<Workout> &workout_options, const WorkoutType 
         if ((initialized == 0) and is_correct_type){
             best_price = current_workout.getPrice();
             lowest_id = current_workout.getId();
-            workout_to_order = i;
+            workout_to_order = current_workout.getId();
             initialized = 1;
         }
 
@@ -171,7 +188,7 @@ int getBestWorkoutIdx(const vector<Workout> &workout_options, const WorkoutType 
         if (is_correct_type and (is_best_price or is_same_price_lowest_id)) {
             best_price = current_workout.getPrice();
             lowest_id = current_workout.getId();
-            workout_to_order = i;
+            workout_to_order = current_workout.getId();
         }
     }
 
@@ -203,9 +220,13 @@ vector<int> FullBodyCustomer::order(const vector<Workout> &workout_options) {
 
     /// for debugging
     for (int i=0; i < workouts_to_order.size(); i++) {
-        Workout current_workout = workout_options[workouts_to_order[i]];
-        printWorkout(current_workout,
-                     "fully body customer: " + this->getName() + " , id: " + to_string(this->getId()) + " added ");
+
+        int current_workout_id = workouts_to_order[i];
+        Workout current_workout = getWorkout(workout_options, current_workout_id);
+
+        /// for debugging
+//        printWorkout(current_workout,
+//                     "fully body customer: " + this->getName() + " , id: " + to_string(this->getId()) + " added ");
     }
     return workouts_to_order;
 }
