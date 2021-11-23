@@ -5,7 +5,7 @@
 
 using namespace std;
 
-extern Studio *backup = nullptr;
+extern Studio *backup;
 
 //TODO:CHECK IF NEEDS TO IMPLEMENT
 BaseAction::BaseAction() : errorMsg("Default error message"), status(ERROR) {}
@@ -40,7 +40,7 @@ void OpenTrainer::act(Studio &studio) {
     }
     //Add customers to the trainer
     for (size_t i = 0; i < customers.size(); i++) {
-        if (i < trainer->getCapacity()){
+        if (i < (::size_t)trainer->getCapacity()){
             trainer->addCustomer(customers[i]);
         }
         else {
@@ -67,24 +67,22 @@ std::string OpenTrainer::toString() const {
     return ans;
 }
 
-static std::vector <std::string>* SplitString(const std::string &str, const char delimiter) {
-    std::vector <std::string> *ans = new std::vector<std::string>();
-    std::string tempSum = "";
-    for (size_t i = 0; i < str.length(); i++) {
-        if (str.at(i) != delimiter) {
-            tempSum += str.at(i);
-        } else {
-            ans->push_back(tempSum);
-            tempSum = "";
-        }
-    }
-    ans->push_back(tempSum);
-    //Returning a pointer to the vector by value so it will 'live' after pop
-    return ans;
-}
+//static std::vector <std::string>* SplitString(const std::string &str, const char delimiter) {
+//    std::vector <std::string> *ans = new std::vector<std::string>();
+//    std::string tempSum = "";
+//    for (size_t i = 0; i < str.length(); i++) {
+//        if (str.at(i) != delimiter) {
+//            tempSum += str.at(i);
+//        } else {
+//            ans->push_back(tempSum);
+//            tempSum = "";
+//        }
+//    }
+//    ans->push_back(tempSum);
+//    //Returning a pointer to the vector by value so it will 'live' after pop
+//    return ans;
+//}
 
-//std::vector <std::string> s = SplitString("adsf", ",");
-//
 //OpenTrainer ParseOpenTrainerInput(std::vector <std::string> &inputPartials) {
 //    std::string trainerID = inputPartials[1];
 //    std::vector < Customer * > customers = std::vector<Customer *>();
@@ -155,7 +153,7 @@ void MoveCustomer::act(Studio &studio) {
     Trainer *dstTrainerPTR = studio.getTrainer(dstTrainer);
     Customer *customer = srcTrainerPTR->getCustomer(id);
     if (srcTrainerPTR == nullptr || dstTrainerPTR == nullptr || !srcTrainerPTR->isOpen()
-        || !dstTrainerPTR->isOpen() || customer == nullptr || dstTrainerPTR->getCapacity() == dstTrainerPTR->getCustomers().size()) {
+        || !dstTrainerPTR->isOpen() || customer == nullptr || (::size_t)dstTrainerPTR->getCapacity() == dstTrainerPTR->getCustomers().size()) {
         error("Cannot move customer");
         return;
     }
@@ -170,9 +168,6 @@ void MoveCustomer::act(Studio &studio) {
     }
     //Transfer the customer
     srcTrainerPTR->removeCustomer(id);
-    if (srcTrainerPTR->getCustomers().size() == 0) {
-        srcTrainerPTR->closeTrainer();
-    }
     dstTrainerPTR->addCustomer(customer);
     dstTrainerPTR->order(id, customerOrders, studio.getWorkoutOptions());
     this->complete();

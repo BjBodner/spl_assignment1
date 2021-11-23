@@ -3,22 +3,31 @@
 
 #include <string>
 
-enum WorkoutType{
+enum WorkoutType {
     ANAEROBIC, MIXED, CARDIO
 };
 
-class Workout{
+class Workout {
 public:
     Workout(int w_id, std::string w_name, int w_price, WorkoutType w_type);
+
     //Added default constructor due to const vars
     Workout();
-    Workout& operator=(const Workout& other);
+
+    Workout(const Workout &other);
+
+    Workout &operator=(const Workout &other);
+
     int getId() const;
+
     std::string getName() const;
+
     int getPrice() const;
+
     WorkoutType getType() const;
+
 private:
-	const int id;
+    const int id;
     const std::string name;
     const int price;
     const WorkoutType type;

@@ -49,7 +49,7 @@ Studio &Studio::operator=(const Studio &other) {
 
 int customerIDCounter = 0;
 
-OpenTrainer* ParseOpenTrainerInput(std::vector <std::string> &inputPartials) {
+OpenTrainer *ParseOpenTrainerInput(std::vector <std::string> &inputPartials) {
     std::string trainerID = inputPartials[1];
     std::vector < Customer * > customers = std::vector<Customer *>();
     for (size_t i = 2; i < inputPartials.size(); i++) {
@@ -94,7 +94,8 @@ void Studio::start() {
             this->actionsLog.push_back(order);
 
         } else if (firstWord == "move") {
-            MoveCustomer *moveCustomer = new MoveCustomer(std::stoi(inputPartials->at(1)), std::stoi(inputPartials->at(2)),
+            MoveCustomer *moveCustomer = new MoveCustomer(std::stoi(inputPartials->at(1)),
+                                                          std::stoi(inputPartials->at(2)),
                                                           std::stoi(inputPartials->at(3)));
             moveCustomer->act(*this);
             this->actionsLog.push_back(moveCustomer);
@@ -147,7 +148,7 @@ int Studio::getNumOfTrainers() const {
 }
 
 Trainer *Studio::getTrainer(int tid) {
-    if (tid >= trainers.size()){
+    if ((size_t) tid >= trainers.size()) {
         return nullptr;
     }
     return trainers.at(tid);
