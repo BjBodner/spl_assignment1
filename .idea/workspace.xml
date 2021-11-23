@@ -8,9 +8,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d5fad42b-cc1b-4e69-8555-7bce63ccc2d5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c++_version/include/Trainer.h" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/include/Trainer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c++_version/src/Studio.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/src/Studio.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c++_version/src/Trainer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/src/Trainer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c++_version/src/Customer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/src/Customer.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,11 +45,6 @@
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RunManager">
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="customer_test" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$PROJECT_DIR$/c++_version/src" PASS_PARENT_ENVS_2="true" RUN_PATH="$PROJECT_DIR$/c++_version/src/Customer.cpp" EXPLICIT_BUILD_TARGET_NAME="all">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -78,13 +71,23 @@
       <workItem from="1637435765545" duration="751000" />
       <workItem from="1637566215905" duration="139000" />
       <workItem from="1637582813201" duration="1862000" />
-      <workItem from="1637584724013" duration="384000" />
-      <workItem from="1637600166198" duration="496000" />
-      <workItem from="1637692864620" duration="1737000" />
+      <workItem from="1637584724013" duration="173000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
