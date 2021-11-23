@@ -49,7 +49,7 @@ Studio &Studio::operator=(const Studio &other) {
 
 int customerIDCounter = 0;
 
-OpenTrainer ParseOpenTrainerInput(std::vector <std::string> &inputPartials) {
+OpenTrainer* ParseOpenTrainerInput(std::vector <std::string> &inputPartials) {
     std::string trainerID = inputPartials[1];
     std::vector < Customer * > customers = std::vector<Customer *>();
     for (size_t i = 2; i < inputPartials.size(); i++) {
@@ -71,7 +71,7 @@ OpenTrainer ParseOpenTrainerInput(std::vector <std::string> &inputPartials) {
         customerIDCounter++;
         delete customerPartials;
     }
-    return OpenTrainer(std::stoi(trainerID), customers);
+    return new OpenTrainer(std::stoi(trainerID), customers);
 }
 
 //TODO: VALIDATE IMPLEMENTATION
@@ -84,33 +84,51 @@ void Studio::start() {
         std::vector <std::string> *inputPartials = SplitString(input, ' ');
         std::string firstWord = inputPartials->at(0);
         if (firstWord == "open") {
-            OpenTrainer openTrainer = ParseOpenTrainerInput(*inputPartials);
-            openTrainer.act(*this);
+            OpenTrainer *openTrainer = ParseOpenTrainerInput(*inputPartials);
+            openTrainer->act(*this);
+            this->actionsLog.push_back(openTrainer);
+
         } else if (firstWord == "order") {
-            Order order = Order(std::stoi(inputPartials->at(1)));
-            order.act(*this);
+            Order *order = new Order(std::stoi(inputPartials->at(1)));
+            order->act(*this);
+            this->actionsLog.push_back(order);
+
         } else if (firstWord == "move") {
-            MoveCustomer moveCustomer = MoveCustomer(std::stoi(inputPartials->at(1)), std::stoi(inputPartials->at(2)),
-                                                     std::stoi(inputPartials->at(3)));
-            moveCustomer.act(*this);
+            MoveCustomer *moveCustomer = new MoveCustomer(std::stoi(inputPartials->at(1)), std::stoi(inputPartials->at(2)),
+                                                          std::stoi(inputPartials->at(3)));
+            moveCustomer->act(*this);
+            this->actionsLog.push_back(moveCustomer);
+
         } else if (firstWord == "close") {
-            Close close = Close(std::stoi(inputPartials->at(1)));
-            close.act(*this);
+            Close *close = new Close(std::stoi(inputPartials->at(1)));
+            close->act(*this);
+            this->actionsLog.push_back(close);
+
         } else if (firstWord == "workout_options") {
-            PrintWorkoutOptions printWorkoutOptions = PrintWorkoutOptions();
-            printWorkoutOptions.act(*this);
+            PrintWorkoutOptions *print_workout_options = new PrintWorkoutOptions();
+            print_workout_options->act(*this);
+            this->actionsLog.push_back(print_workout_options);
+
         } else if (firstWord == "status") {
-            PrintTrainerStatus printTrainerStatus = PrintTrainerStatus(std::stoi(inputPartials->at(1)));
-            printTrainerStatus.act(*this);
+            PrintTrainerStatus *print_trainer_status = new PrintTrainerStatus(std::stoi(inputPartials->at(1)));
+            print_trainer_status->act(*this);
+            this->actionsLog.push_back(print_trainer_status);
+
         } else if (firstWord == "log") {
-            PrintActionsLog printActionsLog = PrintActionsLog();
-            printActionsLog.act(*this);
+            PrintActionsLog *print_actions_log = new PrintActionsLog();
+            print_actions_log->act(*this);
+            this->actionsLog.push_back(print_actions_log);
+
         } else if (firstWord == "backup") {
-            BackupStudio backupStudio = BackupStudio();
-            backupStudio.act(*this);
+            BackupStudio *backupStudio = new BackupStudio();
+            backupStudio->act(*this);
+            this->actionsLog.push_back(backupStudio);
+
         } else if (firstWord == "restore") {
-            RestoreStudio restoreStudio = RestoreStudio();
-            restoreStudio.act(*this);
+            RestoreStudio *restoreStudio = new RestoreStudio();
+            restoreStudio->act(*this);
+            this->actionsLog.push_back(restoreStudio);
+
         }
         std::getline(std::cin, input);
     }
@@ -129,6 +147,9 @@ int Studio::getNumOfTrainers() const {
 }
 
 Trainer *Studio::getTrainer(int tid) {
+    if (tid >= trainers.size()){
+        return nullptr;
+    }
     return trainers.at(tid);
 }
 

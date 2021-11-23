@@ -1,8 +1,11 @@
 #include "../include/Action.h"
 #include "../include/Studio.h"
 #include "../include/Customer.h"
+#include <bits/stdc++.h>
 
-extern Studio *backup;
+using namespace std;
+
+extern Studio *backup = nullptr;
 
 //TODO:CHECK IF NEEDS TO IMPLEMENT
 BaseAction::BaseAction() : errorMsg("Default error message"), status(ERROR) {}
@@ -19,14 +22,12 @@ std::string BaseAction::getErrorMsg() const {
     return errorMsg;
 }
 
-ActionStatus BaseAction::getStatus() const {
-    return status;
-}
-
 void BaseAction::complete() {
     this->status = COMPLETED;
 }
-
+ActionStatus BaseAction::getStatus() const  {
+    return this->status;
+}
 OpenTrainer::OpenTrainer(int id, std::vector<Customer *> &customersList) : trainerId(id), customers(customersList) {}
 
 //TODO: MUST CHECK IF NULLPTR IS GIVEN WHEN NEEDED
@@ -39,7 +40,13 @@ void OpenTrainer::act(Studio &studio) {
     }
     //Add customers to the trainer
     for (size_t i = 0; i < customers.size(); i++) {
-        trainer->addCustomer(customers[i]);
+        if (i < trainer->getCapacity()){
+            trainer->addCustomer(customers[i]);
+        }
+        else {
+            error("Warning did not add customer: " + customers[i]->toString() + ", trainer: "  + to_string(trainerId) + ", is at full capacity");
+        }
+
     }
     //Open trainer's session
     trainer->openTrainer();
@@ -48,7 +55,7 @@ void OpenTrainer::act(Studio &studio) {
 
 //TODO: NEED TO IMPLEMENT CUSTOMER TOSTRING
 std::string OpenTrainer::toString() const {
-    std::string ans = "open " + std::to_string(trainerId) + " ";
+    std::string ans = "open " + to_string(trainerId) + " ";
     for (size_t i = 0; i < customers.size(); i++) {
         ans += customers.at(i)->toString() + " ";
     }
@@ -59,6 +66,50 @@ std::string OpenTrainer::toString() const {
     }
     return ans;
 }
+
+static std::vector <std::string>* SplitString(const std::string &str, const char delimiter) {
+    std::vector <std::string> *ans = new std::vector<std::string>();
+    std::string tempSum = "";
+    for (size_t i = 0; i < str.length(); i++) {
+        if (str.at(i) != delimiter) {
+            tempSum += str.at(i);
+        } else {
+            ans->push_back(tempSum);
+            tempSum = "";
+        }
+    }
+    ans->push_back(tempSum);
+    //Returning a pointer to the vector by value so it will 'live' after pop
+    return ans;
+}
+
+//std::vector <std::string> s = SplitString("adsf", ",");
+//
+//OpenTrainer ParseOpenTrainerInput(std::vector <std::string> &inputPartials) {
+//    std::string trainerID = inputPartials[1];
+//    std::vector < Customer * > customers = std::vector<Customer *>();
+//    for (size_t i = 2; i < inputPartials.size(); i++) {
+//        std::vector <std::string> *customerPartials = SplitString(inputPartials[i], ',');
+//        if (customerPartials->at(1) == "swt") {
+//            SweatyCustomer *sweatyCustomer = new SweatyCustomer(customerPartials->at(0), customers.size());
+//            customers.push_back(sweatyCustomer);
+//        } else if (customerPartials->at(1) == "chp") {
+//            CheapCustomer *cheapCustomer = new CheapCustomer(customerPartials->at(0), customers.size());
+//            customers.push_back(cheapCustomer);
+//        } else if (customerPartials->at(1) == "mcl") {
+//            HeavyMuscleCustomer *heavyMuscleCustomer = new HeavyMuscleCustomer(customerPartials->at(0),
+//                                                                               customers.size());
+//            customers.push_back(heavyMuscleCustomer);
+//        } else if (customerPartials->at(1) == "fbd") {
+//            FullBodyCustomer *fullBodyCustomer = new FullBodyCustomer(customerPartials->at(0), customers.size());
+//            customers.push_back(fullBodyCustomer);
+//        }
+//        delete customerPartials;
+//    }
+//
+//    return OpenTrainer(stoi(trainerID), customers);
+//}
+
 
 Order::Order(int id) : trainerId(id) {}
 
@@ -73,14 +124,14 @@ void Order::act(Studio &studio) {
         Customer *curr = customers[i];
         std::vector<int> orders = curr->order(studio.getWorkoutOptions());
         //Print log to screen
-        for (size_t j = 0; j < orders.size(); j++) {
-            for (size_t k = 0; k < studio.getWorkoutOptions().size(); k++) {
-                if (studio.getWorkoutOptions()[k].getId() == orders[j]) {
-                    std::cout << curr->getName() << " is doing " << studio.getWorkoutOptions()[k].getName()
-                              << std::endl;
-                }
-            }
-        }
+//        for (size_t j = 0; j < orders.size(); j++) {
+//            for (size_t k = 0; k < studio.getWorkoutOptions().size(); k++) {
+//                if (studio.getWorkoutOptions()[k].getId() == orders[j]) {
+//                    std::cout << curr->getName() << " is doing " << studio.getWorkoutOptions()[k].getName()
+//                              << std::endl;
+//                }
+//            }
+//        }
         //Add orders to trainer
         trainer->order(curr->getId(), orders, studio.getWorkoutOptions());
     }
@@ -88,7 +139,7 @@ void Order::act(Studio &studio) {
 }
 
 std::string Order::toString() const {
-    std::string ans = "order " + std::to_string(trainerId) + " ";
+    std::string ans = "order " + to_string(trainerId) + " ";
     if (getStatus() == ERROR) {
         ans += "Error: " + getErrorMsg();
     } else {
@@ -104,7 +155,7 @@ void MoveCustomer::act(Studio &studio) {
     Trainer *dstTrainerPTR = studio.getTrainer(dstTrainer);
     Customer *customer = srcTrainerPTR->getCustomer(id);
     if (srcTrainerPTR == nullptr || dstTrainerPTR == nullptr || !srcTrainerPTR->isOpen()
-        || !dstTrainerPTR->isOpen() || customer == nullptr) {
+        || !dstTrainerPTR->isOpen() || customer == nullptr || dstTrainerPTR->getCapacity() == dstTrainerPTR->getCustomers().size()) {
         error("Cannot move customer");
         return;
     }
@@ -119,14 +170,16 @@ void MoveCustomer::act(Studio &studio) {
     }
     //Transfer the customer
     srcTrainerPTR->removeCustomer(id);
+    if (srcTrainerPTR->getCustomers().size() == 0) {
+        srcTrainerPTR->closeTrainer();
+    }
     dstTrainerPTR->addCustomer(customer);
     dstTrainerPTR->order(id, customerOrders, studio.getWorkoutOptions());
     this->complete();
 }
 
 std::string MoveCustomer::toString() const {
-    std::string ans =
-            "move " + std::to_string(srcTrainer) + " " + std::to_string(dstTrainer) + " " + std::to_string(id) + " ";
+    std::string ans = "move " + to_string(srcTrainer) + " " + to_string(dstTrainer) + " " + to_string(id) + " ";
     if (getStatus() == ERROR) {
         ans += "Error: " + getErrorMsg();
     } else {
@@ -144,12 +197,12 @@ void Close::act(Studio &studio) {
         return;
     }
     trainer->closeTrainer();
-    std::cout << "Trainer " << trainerId << "closed. Salary " << trainer->getSalary() << "NIS" << std::endl;
+    std::cout << "Trainer " << trainerId << " closed. Salary " << trainer->getSalary() << "NIS" << std::endl;
     this->complete();
 }
 
 std::string Close::toString() const {
-    std::string ans = "close " + std::to_string(trainerId) + " ";
+    std::string ans = "close " + to_string(trainerId) + " ";
     if (getStatus() == ERROR) {
         ans += "Error: " + getErrorMsg();
     } else {
@@ -158,14 +211,29 @@ std::string Close::toString() const {
     return ans;
 }
 
+
 CloseAll::CloseAll() {}
 
 void CloseAll::act(Studio &studio) {
+
+    std::vector<int> salaries;
+
     for (int i = 0; i < studio.getNumOfTrainers(); i++) {
         Trainer *trainer = studio.getTrainer(i);
         if (trainer->isOpen()) {
             trainer->closeTrainer();
-            std::cout << "Trainer " << i << "closed. Salary " << trainer->getSalary() << "NIS" << std::endl;
+            salaries.push_back(trainer->getSalary());
+//            std::cout << "Trainer " << i << " closed. Salary " << trainer->getSalary() << "NIS" << std::endl;
+        }
+    }
+
+    /// sort in descending order
+    sort( salaries.begin(), salaries.end());
+    for (int i = salaries.size() - 1; i >= 0 ; i--) {
+        for (int j = 0; j < studio.getNumOfTrainers(); j++) {
+            if (studio.getTrainer(j)->getSalary() == salaries.at(i)){
+                std::cout << "Trainer " << j << " closed. Salary " << salaries.at(i) << "NIS" << std::endl;
+            }
         }
     }
     this->complete();
@@ -199,26 +267,45 @@ PrintTrainerStatus::PrintTrainerStatus(int id) : trainerId(id) {}
 
 void PrintTrainerStatus::act(Studio &studio) {
     Trainer *trainer = studio.getTrainer(trainerId);
-    std::cout << "Trainer " << trainerId << " status: " << trainer->isOpen() << std::endl;
-    if (!trainer->isOpen())
+
+    if (trainer == nullptr)
         return;
+
+//    string trainer_status = "closed";
+//    if (trainer->isOpen())
+//        string trainer_status = "open";
+
+    if (trainer->isOpen())
+        std::cout << "Trainer " << trainerId << " status: open" << std::endl;
+    else {
+        std::cout << "Trainer " << trainerId << " status: closed" << std::endl;
+        return;
+    }
+
+
+    /// print customers
     std::cout << "Customers:" << std::endl;
     std::vector < Customer * > customers = trainer->getCustomers();
     for (size_t i = 0; i < customers.size(); i++) {
-        std::cout << customers.at(i)->getId() << customers.at(i)->getName() << std::endl;
+        std::cout << customers.at(i)->getId() << " "  << customers.at(i)->getName() << std::endl;
     }
+
+    /// print Orders
+    std::cout << "Orders:" << std::endl;
     std::vector <OrderPair> orders = trainer->getOrders();
     for (size_t i = 0; i < orders.size(); i++) {
-        std::cout << orders.at(i).second.getName() << orders.at(i).second.getPrice() << orders.at(i).first << std::endl;
+        std::cout << orders.at(i).second.getName() << " " << orders.at(i).second.getPrice() << " " << orders.at(i).first << std::endl;
     }
+
+    /// print Salary
     std::cout << "Current Trainer's Salary: " << trainer->getSalary() << "NIS" << std::endl;
     this->complete();
 }
 
 std::string PrintTrainerStatus::toString() const {
-    return "status " + std::to_string(trainerId) + " Completed";
+    return "status " + to_string(trainerId) + " Completed";
 }
-
+//
 PrintActionsLog::PrintActionsLog() {}
 
 void PrintActionsLog::act(Studio &studio) {
@@ -249,7 +336,7 @@ std::string BackupStudio::toString() const {
 RestoreStudio::RestoreStudio() {}
 
 void RestoreStudio::act(Studio &studio) {
-    if (backup == nullptr) {
+    if(backup== nullptr){
         error("No backup available");
         return;
     }
