@@ -48,7 +48,7 @@ Workout getWorkout(const vector <Workout> &workout_options, const int workout_id
 SweatyCustomer::SweatyCustomer(string c_name, int c_id) : Customer(c_name, c_id) {}
 
 string SweatyCustomer::toString() const {
-    return "sweaty customer, id: " + to_string(this->getId()) + " , name: " + this->getName();
+    return this->getName() + ",swt";
 }
 
 vector<int> SweatyCustomer::order(const vector <Workout> &workout_options) {
@@ -78,7 +78,7 @@ vector<int> SweatyCustomer::order(const vector <Workout> &workout_options) {
 CheapCustomer::CheapCustomer(string c_name, int c_id) : Customer(c_name, c_id) {}
 
 string CheapCustomer::toString() const {
-    return "cheap customer, id: " + to_string(this->getId()) + " , name: " + this->getName();
+    return this->getName() + ",chp";
 
 }
 
@@ -125,7 +125,7 @@ vector<int> CheapCustomer::order(const vector <Workout> &workout_options) {
 HeavyMuscleCustomer::HeavyMuscleCustomer(string c_name, int c_id) : Customer(c_name, c_id) {}
 
 string HeavyMuscleCustomer::toString() const {
-    return "heavy muscle customer, id: " + to_string(this->getId()) + " , name: " + this->getName();
+    return this->getName() + ",mcl";
 
 }
 
@@ -207,7 +207,7 @@ int getBestWorkoutIdx(const vector <Workout> &workout_options, const WorkoutType
 FullBodyCustomer::FullBodyCustomer(string c_name, int c_id) : Customer(c_name, c_id) {}
 
 string FullBodyCustomer::toString() const {
-    return "full body customer, id: " + to_string(this->getId()) + " , name: " + this->getName();
+    return this->getName() + ",fbd";
 }
 
 vector<int> FullBodyCustomer::order(const vector <Workout> &workout_options) {
