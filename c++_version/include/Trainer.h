@@ -21,6 +21,7 @@ public:
     void closeTrainer();
     int getSalary();
     bool isOpen();
+    ~Trainer();
 private:
     int capacity;
     bool open;

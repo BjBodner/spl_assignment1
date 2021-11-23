@@ -47,25 +47,28 @@ Studio &Studio::operator=(const Studio &other) {
     return *this;
 }
 
+int customerIDCounter = 0;
+
 OpenTrainer ParseOpenTrainerInput(std::vector <std::string> &inputPartials) {
     std::string trainerID = inputPartials[1];
     std::vector < Customer * > customers = std::vector<Customer *>();
     for (size_t i = 2; i < inputPartials.size(); i++) {
         std::vector <std::string> *customerPartials = SplitString(inputPartials[i], ',');
         if (customerPartials->at(1) == "swt") {
-            SweatyCustomer *sweatyCustomer = new SweatyCustomer(customerPartials->at(0), customers.size());
+            SweatyCustomer *sweatyCustomer = new SweatyCustomer(customerPartials->at(0), customerIDCounter);
             customers.push_back(sweatyCustomer);
         } else if (customerPartials->at(1) == "chp") {
-            CheapCustomer *cheapCustomer = new CheapCustomer(customerPartials->at(0), customers.size());
+            CheapCustomer *cheapCustomer = new CheapCustomer(customerPartials->at(0), customerIDCounter);
             customers.push_back(cheapCustomer);
         } else if (customerPartials->at(1) == "mcl") {
             HeavyMuscleCustomer *heavyMuscleCustomer = new HeavyMuscleCustomer(customerPartials->at(0),
-                                                                               customers.size());
+                                                                               customerIDCounter);
             customers.push_back(heavyMuscleCustomer);
         } else if (customerPartials->at(1) == "fbd") {
-            FullBodyCustomer *fullBodyCustomer = new FullBodyCustomer(customerPartials->at(0), customers.size());
+            FullBodyCustomer *fullBodyCustomer = new FullBodyCustomer(customerPartials->at(0), customerIDCounter);
             customers.push_back(fullBodyCustomer);
         }
+        customerIDCounter++;
         delete customerPartials;
     }
     return OpenTrainer(std::stoi(trainerID), customers);

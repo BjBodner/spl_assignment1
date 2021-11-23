@@ -9,6 +9,12 @@
 using namespace std;
 
 
+Trainer::~Trainer() {
+    for (::size_t i = 0; i < customersList.size(); i++) {
+        delete(customersList.at(i));
+    }
+}
+
 Trainer::Trainer(int t_capacity) : capacity(t_capacity), open(false),customersList(std::vector<Customer*>()),orderList(std::vector<OrderPair>()),salary(0) {
 
 }
