@@ -39,10 +39,14 @@ OpenTrainer::~OpenTrainer() {
 }
 
 BaseAction *OpenTrainer::clone() {
-    OpenTrainer *ot = new OpenTrainer(this->trainerId, this->customers);
+    vector<Customer*> newCustomers = vector<Customer*>();
+    OpenTrainer *ot = new OpenTrainer(this->trainerId,newCustomers);
+    for (::size_t i = 0; i < this->customers.size(); i++) {
+        ot->customers.push_back(this->customers[i]->clone());
+    }
     if (this->getStatus() == COMPLETED){
         ot->complete();
-    };
+    }
     return ot;
 }
 
@@ -332,8 +336,10 @@ BaseAction *PrintTrainerStatus::clone() {
 void PrintTrainerStatus::act(Studio &studio) {
     Trainer *trainer = studio.getTrainer(trainerId);
 
-    if (trainer == nullptr)
+    //TODO: Need to delete this if
+    if (trainer == nullptr) {
         return;
+    }
 
 //    string trainer_status = "closed";
 //    if (trainer->isOpen())
@@ -345,7 +351,6 @@ void PrintTrainerStatus::act(Studio &studio) {
         std::cout << "Trainer " << trainerId << " status: closed" << std::endl;
         return;
     }
-
 
     /// print customers
     std::cout << "Customers:" << std::endl;
@@ -428,7 +433,8 @@ void RestoreStudio::act(Studio &studio) {
         error("No backup available");
         return;
     }
-    studio = *backup;
+    studio.steal(*backup);
+    delete backup;
     backup = nullptr;
     this->complete();
 }

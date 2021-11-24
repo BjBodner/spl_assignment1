@@ -21,7 +21,7 @@ public:
     Studio(const Studio& other);
     Studio(Studio&& other);
     Studio& operator=(Studio&& other);
-
+    void steal(Studio& other);
 
 private:
     static void StudioConfigFileParser(std::ifstream& inFile, std::vector<Trainer *> &trainers, std::vector<Workout> &workouts);
