@@ -36,6 +36,7 @@ public:
     void act(Studio &studio);
     std::string toString() const;
     BaseAction* clone();
+    ~OpenTrainer();
 private:
     const int trainerId;
     std::vector<Customer *> customers;

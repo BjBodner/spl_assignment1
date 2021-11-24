@@ -31,6 +31,13 @@ ActionStatus BaseAction::getStatus() const  {
 OpenTrainer::OpenTrainer(int id, std::vector<Customer *> &customersList) : trainerId(id), customers(customersList) {}
 //OpenTrainer::OpenTrainer(int id, std::vector<Customer *> &customersList) : trainerId(id), customers(customersList) {}
 
+OpenTrainer::~OpenTrainer() {
+    for (::size_t i = 0; i < customers.size(); i++) {
+        delete (customers[i]);
+    }
+    customers.clear();
+}
+
 BaseAction *OpenTrainer::clone() {
     OpenTrainer *ot = new OpenTrainer(this->trainerId, this->customers);
     if (this->getStatus() == COMPLETED){
