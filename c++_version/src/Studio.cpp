@@ -41,36 +41,39 @@ Studio::~Studio(){
     this->actionsLog.clear();
 };
 
-Studio::Studio(const Studio& other){
+Studio::Studio(const Studio& other):open(other.open), trainers(std::vector<Trainer *>()), workout_options(std::vector<Workout>()),
+                                    actionsLog(std::vector<BaseAction *>()){
 
     /// copy trainers from other
     for (size_t i = 0; i < other.trainers.size(); i++) {
         Trainer *t = other.trainers.at(i);
         this->trainers.push_back(new Trainer(*t));
     }
-//    this->trainers = other.trainers;
-    this->workout_options = other.workout_options;
+    for (size_t i = 0; i < other.workout_options.size(); i++) {
+        this->workout_options.push_back(Workout(other.workout_options[i]));
+    }
     this->open = other.open;
     for (size_t i = 0; i < other.actionsLog.size(); i++) {
-
         this->actionsLog.push_back(other.actionsLog.at(i)->clone());
     }
 }
 
 
-Studio::Studio(Studio&& other){
+Studio::Studio(Studio&& other):open(other.open), trainers(std::vector<Trainer *>()), workout_options(std::vector<Workout>()),
+                               actionsLog(std::vector<BaseAction *>()){
 
     /// copy trainers from other
     for (size_t i = 0; i < other.trainers.size(); i++) {
         this->trainers.push_back(other.trainers.at(i));
-        other.trainers.at(i) = nullptr;
+        other.trainers[i] = nullptr;
     }
 //    this->trainers = other.trainers;
-    this->workout_options = other.workout_options;
-    this->open = other.open;
+    for (size_t i = 0; i < other.workout_options.size(); i++) {
+        this->workout_options.push_back(Workout(other.workout_options[i]));
+    }
     for (size_t i = 0; i < other.actionsLog.size(); i++) {
         this->actionsLog.push_back(other.actionsLog.at(i));
-        other.actionsLog.at(i) = nullptr;
+        other.actionsLog[i] = nullptr;
     }
 }
 
@@ -179,14 +182,15 @@ OpenTrainer* ParseOpenTrainerInput(std::vector <std::string> &inputPartials) {
     return new OpenTrainer(std::stoi(trainerID), customers);
 }
 
-//TODO: VALIDATE IMPLEMENTATION
+//TODO: MAKE IT PRETTIER
 void Studio::start() {
     open = true;
     std::cout << "Studio is now open!" << std::endl;
     std::string input = "";
     std::getline(std::cin, input);
+    std::vector <std::string> *inputPartials;
     while (input != "closeall") {
-        std::vector <std::string> *inputPartials = SplitString(input, ' ');
+        inputPartials = SplitString(input, ' ');
         std::string firstWord = inputPartials->at(0);
         if (firstWord == "open") {
             OpenTrainer *openTrainer = ParseOpenTrainerInput(*inputPartials);
@@ -236,6 +240,7 @@ void Studio::start() {
 
         }
         std::getline(std::cin, input);
+        delete inputPartials;
     }
     CloseAll closeAll = CloseAll();
     closeAll.act(*this);
@@ -252,7 +257,7 @@ int Studio::getNumOfTrainers() const {
 }
 
 Trainer *Studio::getTrainer(int tid) {
-    if (tid >= trainers.size()){
+    if ((size_t)tid >= trainers.size()){
         return nullptr;
     }
     return trainers.at(tid);

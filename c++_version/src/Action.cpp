@@ -148,14 +148,14 @@ void Order::act(Studio &studio) {
         Customer *curr = customers[i];
         std::vector<int> orders = curr->order(studio.getWorkoutOptions());
         //Print log to screen
-//        for (size_t j = 0; j < orders.size(); j++) {
-//            for (size_t k = 0; k < studio.getWorkoutOptions().size(); k++) {
-//                if (studio.getWorkoutOptions()[k].getId() == orders[j]) {
-//                    std::cout << curr->getName() << " is doing " << studio.getWorkoutOptions()[k].getName()
-//                              << std::endl;
-//                }
-//            }
-//        }
+        for (size_t j = 0; j < orders.size(); j++) {
+            for (size_t k = 0; k < studio.getWorkoutOptions().size(); k++) {
+                if (studio.getWorkoutOptions()[k].getId() == orders[j]) {
+                    std::cout << curr->getName() << " is Doing " << studio.getWorkoutOptions()[k].getName()
+                              << std::endl;
+                }
+            }
+        }
         //Add orders to trainer
         trainer->order(curr->getId(), orders, studio.getWorkoutOptions());
     }
@@ -358,7 +358,7 @@ void PrintTrainerStatus::act(Studio &studio) {
     std::cout << "Orders:" << std::endl;
     std::vector <OrderPair> orders = trainer->getOrders();
     for (size_t i = 0; i < orders.size(); i++) {
-        std::cout << orders.at(i).second.getName() << " " << orders.at(i).second.getPrice() << " " << orders.at(i).first << std::endl;
+        std::cout << orders.at(i).second.getName() << " " << orders.at(i).second.getPrice() << "NIS " << orders.at(i).first << std::endl;
     }
 
     /// print Salary

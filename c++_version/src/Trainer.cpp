@@ -171,7 +171,7 @@ void Trainer::order(const int customer_id, const std::vector<int> workout_ids,
 
             if (current_workout.getId() == requested_workout_id) {
                 orderList.push_back(OrderPair(customer_id, workout_options[j]));
-                cout << this->getCustomer(customer_id)->getName() + " Is Doing " + current_workout.getName() << endl;
+//                cout << this->getCustomer(customer_id)->getName() + " Is Doing " + current_workout.getName() << endl;
                 break;
             }
         }
