@@ -8,14 +8,8 @@
   <component name="ChangeListManager">
     <list default="true" id="19f47698-dc64-40f3-b98c-85c8b3ee1cde" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c++_version/include/Customer.h" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/include/Customer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c++_version/include/Trainer.h" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/include/Trainer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c++_version/include/Workout.h" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/include/Workout.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c++_version/src/Action.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/src/Action.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c++_version/src/Customer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/src/Customer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c++_version/include/Studio.h" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/include/Studio.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/c++_version/src/Studio.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/src/Studio.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c++_version/src/Trainer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/src/Trainer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c++_version/src/Workout.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/c++_version/src/Workout.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

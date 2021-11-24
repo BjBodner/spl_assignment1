@@ -27,29 +27,134 @@ static std::vector <std::string> *SplitString(const std::string &str, const char
     //Returning a pointer to the vector by value so it will 'live' after pop
     return ans;
 }
+Studio::~Studio(){
+    for (size_t i = 0; i < this->trainers.size(); i++) {
+        delete trainers.at(i);
+        this->trainers.at(i) = nullptr;
+    }
+    this->trainers.clear();
+    this->workout_options.clear();
+    for (size_t i = 0; i < actionsLog.size(); i++) {
+        delete actionsLog.at(i);
+        this->actionsLog.at(i) = nullptr;
+    }
+    this->actionsLog.clear();
+};
+
+Studio::Studio(const Studio& other){
+
+    /// copy trainers from other
+    for (size_t i = 0; i < other.trainers.size(); i++) {
+        Trainer *t = other.trainers.at(i);
+        this->trainers.push_back(new Trainer(*t));
+    }
+//    this->trainers = other.trainers;
+    this->workout_options = other.workout_options;
+    this->open = other.open;
+    for (size_t i = 0; i < other.actionsLog.size(); i++) {
+
+        this->actionsLog.push_back(other.actionsLog.at(i)->clone());
+    }
+}
+
+
+Studio::Studio(Studio&& other){
+
+    /// copy trainers from other
+    for (size_t i = 0; i < other.trainers.size(); i++) {
+        this->trainers.push_back(other.trainers.at(i));
+        other.trainers.at(i) = nullptr;
+    }
+//    this->trainers = other.trainers;
+    this->workout_options = other.workout_options;
+    this->open = other.open;
+    for (size_t i = 0; i < other.actionsLog.size(); i++) {
+        this->actionsLog.push_back(other.actionsLog.at(i));
+        other.actionsLog.at(i) = nullptr;
+    }
+}
 
 Studio &Studio::operator=(const Studio &other) {
     if (&other != this) {
         this->open = other.open;
-        for (size_t i = 0; i < trainers.size(); i++) {
+
+        /// delete original trainers
+        for (size_t i = 0; i < this->trainers.size(); i++) {
             delete trainers.at(i);
+            this->trainers.at(i) = nullptr;
         }
-        this->trainers = other.trainers;
+        this->trainers.clear();
+
+        /// copy trainers from other
+        for (size_t i = 0; i < other.trainers.size(); i++) {
+            this->trainers.push_back(other.trainers.at(i));
+        }
+
+        /// delete original workouts and copy from other
+        this->workout_options.clear();
+        for (size_t i = 0; i < other.workout_options.size(); i++) {
+            this->workout_options.push_back(other.workout_options.at(i));
+        }
+
+        /// delete original action log
+        for (size_t i = 0; i < actionsLog.size(); i++) {
+            delete this->actionsLog.at(i);
+            this->actionsLog.at(i) = nullptr;
+        }
+        this->actionsLog.clear();
+
+        /// copy action log from other
+        for (size_t i = 0; i < other.actionsLog.size(); i++) {
+            this->actionsLog.push_back(other.actionsLog.at(i));
+        }
+    }
+    return *this;
+}
+
+
+
+Studio &Studio::operator=(Studio&& other) {
+    if (&other != this) {
+        this->open = other.open;
+
+        /// delete original trainers
+        for (size_t i = 0; i < this->trainers.size(); i++) {
+            delete trainers.at(i);
+            this->trainers.at(i) = nullptr;
+        }
+        this->trainers.clear();
+
+        /// move pointers of trainers and remove them in other
+        for (size_t i = 0; i < trainers.size(); i++) {
+            this->trainers.push_back(other.trainers.at(i));
+            other.trainers.at(i) = nullptr;
+        }
+
+        /// copy workout options
         this->workout_options.clear();
         for (size_t i = 0; i < workout_options.size(); i++) {
             this->workout_options.push_back(other.workout_options.at(i));
         }
-        for (size_t i = 0; i < actionsLog.size(); i++) {
-            delete actionsLog.at(i);
+
+        /// delete action log
+        for (size_t i = 0; i < this->actionsLog.size(); i++) {
+            delete this->actionsLog.at(i);
+            this->actionsLog.at(i) = nullptr;
         }
-        this->actionsLog = other.actionsLog;
+        this->actionsLog.clear();
+
+        /// move pointers to action log and remove in source
+        for (size_t i = 0; i < actionsLog.size(); i++) {
+            this->actionsLog.push_back(other.actionsLog.at(i));
+            other.actionsLog.at(i) = nullptr;
+        }
     }
     return *this;
 }
 
 int customerIDCounter = 0;
 
-OpenTrainer *ParseOpenTrainerInput(std::vector <std::string> &inputPartials) {
+OpenTrainer* ParseOpenTrainerInput(std::vector <std::string> &inputPartials) {
     std::string trainerID = inputPartials[1];
     std::vector < Customer * > customers = std::vector<Customer *>();
     for (size_t i = 2; i < inputPartials.size(); i++) {
@@ -94,8 +199,7 @@ void Studio::start() {
             this->actionsLog.push_back(order);
 
         } else if (firstWord == "move") {
-            MoveCustomer *moveCustomer = new MoveCustomer(std::stoi(inputPartials->at(1)),
-                                                          std::stoi(inputPartials->at(2)),
+            MoveCustomer *moveCustomer = new MoveCustomer(std::stoi(inputPartials->at(1)), std::stoi(inputPartials->at(2)),
                                                           std::stoi(inputPartials->at(3)));
             moveCustomer->act(*this);
             this->actionsLog.push_back(moveCustomer);
@@ -148,7 +252,7 @@ int Studio::getNumOfTrainers() const {
 }
 
 Trainer *Studio::getTrainer(int tid) {
-    if ((size_t) tid >= trainers.size()) {
+    if (tid >= trainers.size()){
         return nullptr;
     }
     return trainers.at(tid);

@@ -7,16 +7,21 @@
 #include "Trainer.h"
 #include "Action.h"
 
-class Studio{		
+class Studio{
 public:
-	Studio();
+    Studio();
     Studio(const std::string &configFilePath);
     void start();
     int getNumOfTrainers() const;
     Trainer* getTrainer(int tid);
-	const std::vector<BaseAction*>& getActionsLog() const; // Return a reference to the history of actions
+    const std::vector<BaseAction*>& getActionsLog() const; // Return a reference to the history of actions
     std::vector<Workout>& getWorkoutOptions();
     Studio& operator=(const Studio& other);
+    virtual ~Studio();
+    Studio(const Studio& other);
+    Studio(Studio&& other);
+    Studio& operator=(Studio&& other);
+
 
 private:
     static void StudioConfigFileParser(std::ifstream& inFile, std::vector<Trainer *> &trainers, std::vector<Workout> &workouts);
