@@ -5,7 +5,7 @@
 
 using namespace std;
 
-extern Studio *backup;
+extern Studio *backup = nullptr;
 
 //TODO:CHECK IF NEEDS TO IMPLEMENT
 BaseAction::BaseAction() : errorMsg("Default error message"), status(ERROR) {}
@@ -29,6 +29,15 @@ ActionStatus BaseAction::getStatus() const  {
     return this->status;
 }
 OpenTrainer::OpenTrainer(int id, std::vector<Customer *> &customersList) : trainerId(id), customers(customersList) {}
+//OpenTrainer::OpenTrainer(int id, std::vector<Customer *> &customersList) : trainerId(id), customers(customersList) {}
+
+BaseAction *OpenTrainer::clone() {
+    OpenTrainer *ot = new OpenTrainer(this->trainerId, this->customers);
+    if (this->getStatus() == COMPLETED){
+        ot->complete();
+    };
+    return ot;
+}
 
 //TODO: MUST CHECK IF NULLPTR IS GIVEN WHEN NEEDED
 //TODO: ENSURE WHETHER NEEDS TO CHECK CAPACITY BEFORE ADDING CUSTOMERS
@@ -40,8 +49,8 @@ void OpenTrainer::act(Studio &studio) {
     }
     //Add customers to the trainer
     for (size_t i = 0; i < customers.size(); i++) {
-        if (i < (::size_t)trainer->getCapacity()){
-            trainer->addCustomer(customers[i]);
+        if (i < trainer->getCapacity()){
+            trainer->addCustomer(customers[i]->clone());
         }
         else {
             error("Warning did not add customer: " + customers[i]->toString() + ", trainer: "  + to_string(trainerId) + ", is at full capacity");
@@ -67,22 +76,24 @@ std::string OpenTrainer::toString() const {
     return ans;
 }
 
-//static std::vector <std::string>* SplitString(const std::string &str, const char delimiter) {
-//    std::vector <std::string> *ans = new std::vector<std::string>();
-//    std::string tempSum = "";
-//    for (size_t i = 0; i < str.length(); i++) {
-//        if (str.at(i) != delimiter) {
-//            tempSum += str.at(i);
-//        } else {
-//            ans->push_back(tempSum);
-//            tempSum = "";
-//        }
-//    }
-//    ans->push_back(tempSum);
-//    //Returning a pointer to the vector by value so it will 'live' after pop
-//    return ans;
-//}
+static std::vector <std::string>* SplitString(const std::string &str, const char delimiter) {
+    std::vector <std::string> *ans = new std::vector<std::string>();
+    std::string tempSum = "";
+    for (size_t i = 0; i < str.length(); i++) {
+        if (str.at(i) != delimiter) {
+            tempSum += str.at(i);
+        } else {
+            ans->push_back(tempSum);
+            tempSum = "";
+        }
+    }
+    ans->push_back(tempSum);
+    //Returning a pointer to the vector by value so it will 'live' after pop
+    return ans;
+}
 
+//std::vector <std::string> s = SplitString("adsf", ",");
+//
 //OpenTrainer ParseOpenTrainerInput(std::vector <std::string> &inputPartials) {
 //    std::string trainerID = inputPartials[1];
 //    std::vector < Customer * > customers = std::vector<Customer *>();
@@ -110,6 +121,14 @@ std::string OpenTrainer::toString() const {
 
 
 Order::Order(int id) : trainerId(id) {}
+
+BaseAction *Order::clone() {
+    Order *o = new Order(this->trainerId);
+    if (this->getStatus() == COMPLETED){
+        o->complete();
+    };
+    return o;
+}
 
 void Order::act(Studio &studio) {
     Trainer *trainer = studio.getTrainer(trainerId);
@@ -148,12 +167,20 @@ std::string Order::toString() const {
 
 MoveCustomer::MoveCustomer(int src, int dst, int customerId) : srcTrainer(src), dstTrainer(dst), id(customerId) {}
 
+BaseAction *MoveCustomer::clone() {
+    MoveCustomer *mc = new MoveCustomer(this->srcTrainer, this->dstTrainer, this->id);
+    if (this->getStatus() == COMPLETED){
+        mc->complete();
+    };
+    return mc;
+}
+
 void MoveCustomer::act(Studio &studio) {
     Trainer *srcTrainerPTR = studio.getTrainer(srcTrainer);
     Trainer *dstTrainerPTR = studio.getTrainer(dstTrainer);
     Customer *customer = srcTrainerPTR->getCustomer(id);
     if (srcTrainerPTR == nullptr || dstTrainerPTR == nullptr || !srcTrainerPTR->isOpen()
-        || !dstTrainerPTR->isOpen() || customer == nullptr || (::size_t)dstTrainerPTR->getCapacity() == dstTrainerPTR->getCustomers().size()) {
+        || !dstTrainerPTR->isOpen() || customer == nullptr || dstTrainerPTR->getCapacity() == dstTrainerPTR->getCustomers().size()) {
         error("Cannot move customer");
         return;
     }
@@ -168,6 +195,9 @@ void MoveCustomer::act(Studio &studio) {
     }
     //Transfer the customer
     srcTrainerPTR->removeCustomer(id);
+    if (srcTrainerPTR->getCustomers().size() == 0) {
+        srcTrainerPTR->closeTrainer();
+    }
     dstTrainerPTR->addCustomer(customer);
     dstTrainerPTR->order(id, customerOrders, studio.getWorkoutOptions());
     this->complete();
@@ -184,6 +214,14 @@ std::string MoveCustomer::toString() const {
 }
 
 Close::Close(int id) : trainerId(id) {}
+
+BaseAction *Close::clone() {
+    Close *c = new Close(this->trainerId);
+    if (this->getStatus() == COMPLETED){
+        c->complete();
+    };
+    return c;
+}
 
 void Close::act(Studio &studio) {
     Trainer *trainer = studio.getTrainer(trainerId);
@@ -208,6 +246,14 @@ std::string Close::toString() const {
 
 
 CloseAll::CloseAll() {}
+
+BaseAction *CloseAll::clone() {
+    CloseAll *ca = new CloseAll();
+    if (this->getStatus() == COMPLETED){
+        ca->complete();
+    };
+    return ca;
+}
 
 void CloseAll::act(Studio &studio) {
 
@@ -240,6 +286,14 @@ std::string CloseAll::toString() const {
 
 PrintWorkoutOptions::PrintWorkoutOptions() {}
 
+BaseAction *PrintWorkoutOptions::clone() {
+    PrintWorkoutOptions *pwo = new PrintWorkoutOptions();
+    if (this->getStatus() == COMPLETED){
+        pwo->complete();
+    };
+    return pwo;
+}
+
 void PrintWorkoutOptions::act(Studio &studio) {
     std::vector <std::string> workoutTypesStrings = std::vector<std::string>(3);
     workoutTypesStrings[WorkoutType::CARDIO] = "Cardio";
@@ -259,6 +313,14 @@ std::string PrintWorkoutOptions::toString() const {
 }
 
 PrintTrainerStatus::PrintTrainerStatus(int id) : trainerId(id) {}
+
+BaseAction *PrintTrainerStatus::clone() {
+    PrintTrainerStatus *pts = new PrintTrainerStatus(this->trainerId);
+    if (this->getStatus() == COMPLETED){
+        pts->complete();
+    };
+    return pts;
+}
 
 void PrintTrainerStatus::act(Studio &studio) {
     Trainer *trainer = studio.getTrainer(trainerId);
@@ -303,6 +365,14 @@ std::string PrintTrainerStatus::toString() const {
 //
 PrintActionsLog::PrintActionsLog() {}
 
+BaseAction *PrintActionsLog::clone() {
+    PrintActionsLog *pal = new PrintActionsLog();
+    if (this->getStatus() == COMPLETED){
+        pal->complete();
+    };
+    return pal;
+}
+
 void PrintActionsLog::act(Studio &studio) {
     std::vector < BaseAction * > actions = studio.getActionsLog();
     for (size_t i = 0; i < actions.size(); i++) {
@@ -317,6 +387,14 @@ std::string PrintActionsLog::toString() const {
 
 BackupStudio::BackupStudio() {}
 
+BaseAction *BackupStudio::clone() {
+    BackupStudio *bs = new BackupStudio();
+    if (this->getStatus() == COMPLETED){
+        bs->complete();
+    };
+    return bs;
+}
+
 void BackupStudio::act(Studio &studio) {
     if (backup != nullptr)
         delete backup;
@@ -329,6 +407,14 @@ std::string BackupStudio::toString() const {
 }
 
 RestoreStudio::RestoreStudio() {}
+
+BaseAction *RestoreStudio::clone() {
+    RestoreStudio *rs = new RestoreStudio();
+    if (this->getStatus() == COMPLETED){
+        rs->complete();
+    };
+    return rs;
+}
 
 void RestoreStudio::act(Studio &studio) {
     if(backup== nullptr){
