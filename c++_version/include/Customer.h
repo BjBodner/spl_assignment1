@@ -48,6 +48,7 @@ public:
     std::string toString() const;
     Customer* clone();
 private:
+    std::vector<Workout>* sortWorkouts(std::vector<Workout> &workout_options);
 };
 
 

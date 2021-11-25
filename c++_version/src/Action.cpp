@@ -50,8 +50,6 @@ BaseAction *OpenTrainer::clone() {
     return ot;
 }
 
-//TODO: MUST CHECK IF NULLPTR IS GIVEN WHEN NEEDED
-//TODO: ENSURE WHETHER NEEDS TO CHECK CAPACITY BEFORE ADDING CUSTOMERS
 void OpenTrainer::act(Studio &studio) {
     Trainer *trainer = studio.getTrainer(trainerId);
     if (trainer == nullptr || trainer->isOpen()) {
@@ -73,7 +71,6 @@ void OpenTrainer::act(Studio &studio) {
     this->complete();
 }
 
-//TODO: NEED TO IMPLEMENT CUSTOMER TOSTRING
 std::string OpenTrainer::toString() const {
     std::string ans = "open " + to_string(trainerId) + " ";
     for (size_t i = 0; i < customers.size(); i++) {
@@ -86,50 +83,6 @@ std::string OpenTrainer::toString() const {
     }
     return ans;
 }
-//
-//static std::vector <std::string>* SplitString(const std::string &str, const char delimiter) {
-//    std::vector <std::string> *ans = new std::vector<std::string>();
-//    std::string tempSum = "";
-//    for (size_t i = 0; i < str.length(); i++) {
-//        if (str.at(i) != delimiter) {
-//            tempSum += str.at(i);
-//        } else {
-//            ans->push_back(tempSum);
-//            tempSum = "";
-//        }
-//    }
-//    ans->push_back(tempSum);
-//    //Returning a pointer to the vector by value so it will 'live' after pop
-//    return ans;
-//}
-
-//std::vector <std::string> s = SplitString("adsf", ",");
-//
-//OpenTrainer ParseOpenTrainerInput(std::vector <std::string> &inputPartials) {
-//    std::string trainerID = inputPartials[1];
-//    std::vector < Customer * > customers = std::vector<Customer *>();
-//    for (size_t i = 2; i < inputPartials.size(); i++) {
-//        std::vector <std::string> *customerPartials = SplitString(inputPartials[i], ',');
-//        if (customerPartials->at(1) == "swt") {
-//            SweatyCustomer *sweatyCustomer = new SweatyCustomer(customerPartials->at(0), customers.size());
-//            customers.push_back(sweatyCustomer);
-//        } else if (customerPartials->at(1) == "chp") {
-//            CheapCustomer *cheapCustomer = new CheapCustomer(customerPartials->at(0), customers.size());
-//            customers.push_back(cheapCustomer);
-//        } else if (customerPartials->at(1) == "mcl") {
-//            HeavyMuscleCustomer *heavyMuscleCustomer = new HeavyMuscleCustomer(customerPartials->at(0),
-//                                                                               customers.size());
-//            customers.push_back(heavyMuscleCustomer);
-//        } else if (customerPartials->at(1) == "fbd") {
-//            FullBodyCustomer *fullBodyCustomer = new FullBodyCustomer(customerPartials->at(0), customers.size());
-//            customers.push_back(fullBodyCustomer);
-//        }
-//        delete customerPartials;
-//    }
-//
-//    return OpenTrainer(stoi(trainerID), customers);
-//}
-
 
 Order::Order(int id) : trainerId(id) {}
 

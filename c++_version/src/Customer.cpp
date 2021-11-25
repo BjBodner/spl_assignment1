@@ -74,11 +74,11 @@ vector<int> SweatyCustomer::order(const vector <Workout> &workout_options) {
 }
 
 Customer *SweatyCustomer::clone() {
-    return new SweatyCustomer(this->getName(),this->getId());
+    return new SweatyCustomer(this->getName(), this->getId());
 }
 
 Customer *CheapCustomer::clone() {
-    return new CheapCustomer(this->getName(),this->getId());
+    return new CheapCustomer(this->getName(), this->getId());
 }
 
 ///// Cheap Customer class
@@ -135,32 +135,69 @@ string HeavyMuscleCustomer::toString() const {
 }
 
 Customer *HeavyMuscleCustomer::clone() {
-    return new HeavyMuscleCustomer(this->getName(),this->getId());
+    return new HeavyMuscleCustomer(this->getName(), this->getId());
 }
 
 vector<int> HeavyMuscleCustomer::order(const vector <Workout> &workout_options) {
-
     /// get anaerobic workouts
-
     vector<int> workouts_to_order;
-
-    for (::size_t i = 0; i < workout_options.size(); i++) {
-        Workout current_workout = workout_options[i];
-
-        if (current_workout.getType() == ANAEROBIC) {
-
-            /// for debugging
-//            printWorkout(current_workout, "BEFORE SORTING heavy customer: " + this->getName() + " , id: " + to_string(this->getId()) + " added ");
-            workouts_to_order.push_back(current_workout.getId());
+    vector <Workout> anaerobicWorkouts = vector<Workout>();
+    for (::size_t i = 0; i < workout_options.size(); ++i) {
+        if (workout_options[i].getType() == ANAEROBIC) {
+            anaerobicWorkouts.push_back(Workout(workout_options[i]));
         }
     }
-
-
-    /// TODO sort based on price from most expensive to cheapest
-
+    vector <Workout> *sorted = sortWorkouts(anaerobicWorkouts);
+    for (::size_t i = 0; i < sorted->size(); i++) {
+        workouts_to_order.push_back(sorted->at(i).getId());
+    }
+    delete sorted;
     return workouts_to_order;
 }
 
+vector <Workout> *HeavyMuscleCustomer::sortWorkouts(vector <Workout> &workout_options) {
+    int samePriceCounter = 0;
+    vector <Workout> *sortedArr = new vector<Workout>();
+    int max = 0;
+    int lastMax = INT16_MAX;
+    int maxIndex = 0;
+    for (::size_t i = 0; i < workout_options.size(); ++i) {
+        max = 0;
+        maxIndex = 0;
+        //Find all the ones with the same price as lastMax, and at the current relative position
+        int localSamePriceCounter = 0;
+        bool foundAnotherLastMax = false;
+        for (::size_t j = 0; j < workout_options.size(); ++j) {
+            if (workout_options[j].getPrice() == lastMax) {
+                if (localSamePriceCounter == samePriceCounter) {
+                    foundAnotherLastMax = true;
+                    maxIndex = j;
+                    break;
+                } else {
+                    localSamePriceCounter++;
+                }
+            }
+        }
+        if (foundAnotherLastMax) {
+            //Found another one with the same price as lastMax
+            sortedArr->push_back(workout_options[maxIndex]);
+            samePriceCounter++;
+            continue;
+        } else {
+            //Didn't find another one with the same price as lastMax, initializing samePriceCounter
+            samePriceCounter = 1;
+        }
+        for (::size_t j = 0; j < workout_options.size(); ++j) {
+            if (workout_options[j].getPrice() < lastMax && workout_options[j].getPrice() > max) {
+                max = workout_options[j].getPrice();
+                maxIndex = j;
+            }
+        }
+        sortedArr->push_back(workout_options[maxIndex]);
+        lastMax = max;
+    }
+    return sortedArr;
+}
 
 ///// helper functions
 int getBestWorkoutIdx(const vector <Workout> &workout_options, const WorkoutType workouttype,
@@ -248,7 +285,7 @@ vector<int> FullBodyCustomer::order(const vector <Workout> &workout_options) {
 }
 
 Customer *FullBodyCustomer::clone() {
-    return new FullBodyCustomer(this->getName(),this->getId());
+    return new FullBodyCustomer(this->getName(), this->getId());
 }
 
 
