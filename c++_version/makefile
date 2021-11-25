@@ -5,15 +5,14 @@ CFLAGS = -g -Wall -Weffc++ -std=c++11
 LFLAGS = -L/usr/lib
 OFILES = bin/Action.o bin/Customer.o bin/Trainer.o bin/Workout.o bin/Studio.o bin/main.o
 # All Targets
-all: hello
+all: studio
 
 # Tool invocations
-# Executable "hello" depends on the files hello.o and run.o.
-hello: bin/srcToOFile
+studio: bin/srcToOFile
 	@echo 'Building target: hello'
 	@echo 'Invoking: C++ Linker'
-	$(CC) -o bin/hello $(OFILES) $(LFLAGS)
-	@echo 'Finished building target: hello'
+	$(CC) -o bin/studio $(OFILES) $(LFLAGS)
+	@echo 'Finished building target: studio'
 	@echo ' '
 
 # Parse all cpp files to o files
