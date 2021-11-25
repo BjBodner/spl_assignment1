@@ -45,7 +45,8 @@ Studio::~Studio() {
 
 Studio::Studio(const Studio &other) : open(other.open), trainers(std::vector<Trainer *>()),
                                       workout_options(std::vector<Workout>()),
-                                      actionsLog(std::vector<BaseAction *>()) {
+                                      actionsLog(std::vector<BaseAction *>()),
+                                      customerIDCounter(other.customerIDCounter) {
     /// copy trainers from other
     for (size_t i = 0; i < other.trainers.size(); i++) {
         this->trainers.push_back(new Trainer(*other.trainers.at(i)));
@@ -61,7 +62,7 @@ Studio::Studio(const Studio &other) : open(other.open), trainers(std::vector<Tra
 
 Studio::Studio(Studio &&other) : open(other.open), trainers(std::vector<Trainer *>()),
                                  workout_options(std::vector<Workout>()),
-                                 actionsLog(std::vector<BaseAction *>()) {
+                                 actionsLog(std::vector<BaseAction *>()), customerIDCounter(other.customerIDCounter) {
 
     /// copy trainers from other
     for (size_t i = 0; i < other.trainers.size(); i++) {
@@ -151,6 +152,7 @@ void Studio::steal(Studio &other) {
             other.actionsLog.at(i) = nullptr;
         }
         other.actionsLog.clear();
+        this->customerIDCounter = other.customerIDCounter;
     }
 }
 
@@ -196,9 +198,7 @@ Studio &Studio::operator=(Studio &&other) {
     return *this;
 }
 
-int customerIDCounter = 0;
-
-OpenTrainer *ParseOpenTrainerInput(std::vector <std::string> &inputPartials) {
+OpenTrainer *Studio::ParseOpenTrainerInput(std::vector <std::string> &inputPartials) {
     std::string trainerID = inputPartials[1];
     std::vector < Customer * > customers = std::vector<Customer *>();
     for (size_t i = 2; i < inputPartials.size(); i++) {
@@ -308,7 +308,7 @@ Trainer *Studio::getTrainer(int tid) {
 
 //TODO: MUST IMPLEMENT
 Studio::Studio() : open(false), trainers(std::vector<Trainer *>()), workout_options(std::vector<Workout>()),
-                   actionsLog(std::vector<BaseAction *>()) {
+                   actionsLog(std::vector<BaseAction *>()), customerIDCounter(0) {
 
 }
 

@@ -29,6 +29,8 @@ private:
     std::vector<Trainer*> trainers;
     std::vector<Workout> workout_options;
     std::vector<BaseAction*> actionsLog;
+    int customerIDCounter;
+    OpenTrainer *ParseOpenTrainerInput(std::vector <std::string> &inputPartials);
 };
 
 #endif
